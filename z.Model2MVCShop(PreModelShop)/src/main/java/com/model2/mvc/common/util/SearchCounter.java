@@ -164,7 +164,7 @@ public class SearchCounter {
 	}
 	
 	public void fileWriter() throws Exception{
-		File file = new File("C:\\Users\\User\\git\\repository\\z.Model2MVCShop(PreModelShop)\\src\\main\\java\\com\\model2\\mvc\\resources\\counter.txt");
+		File file = new File("C:\\Users\\User\\git\\PreModelShop\\z.Model2MVCShop(PreModelShop)\\src\\main\\java\\com\\model2\\mvc\\resources\\counter.txt");
 		
 		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file,true));
@@ -188,7 +188,7 @@ public class SearchCounter {
 	}
 	 
 	public void fileReader() throws Exception{
-		File file = new File("C:\\Users\\User\\git\\repository\\z.Model2MVCShop(PreModelShop)\\src\\main\\java\\com\\model2\\mvc\\resources\\counter.txt");
+		File file = new File("C:\\Users\\User\\git\\PreModelShop\\z.Model2MVCShop(PreModelShop)\\src\\main\\java\\com\\model2\\mvc\\resources\\counter.txt");
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		
 		for(; ; ) {
