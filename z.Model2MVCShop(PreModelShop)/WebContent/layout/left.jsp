@@ -40,7 +40,7 @@ function history(){
 		%>
 		<tr>
 		<td class="Depth03">
-			<a href="/app/user/getUser?userId=<%=vo.getUserId() %>" target="rightFrame">개인정보조회</a>
+			<a href="/user/getUser?userId=<%=vo.getUserId() %>" target="rightFrame">개인정보조회</a>
 		</td>
 		</tr>
 		<%
@@ -51,7 +51,7 @@ function history(){
 		%>
 		<tr>
 		<td class="Depth03" >
-			<a href="/app/user/listUser" target="rightFrame">회원정보조회</a>
+			<a href="/user/listUser" target="rightFrame">회원정보조회</a>
 		</td>
 		</tr>
 		<%
@@ -77,7 +77,7 @@ function history(){
 			</td>
 		</tr>
 		<td class="Depth03">
-				<a href="/app/product/listProduct?menu=manage" target="rightFrame">판매상품관리</a>
+				<a href="/product/listProduct?menu=manage" target="rightFrame">판매상품관리</a>
 			</td>
 		</tr>
 		<tr>
@@ -96,7 +96,7 @@ function history(){
 	<table  border="0" cellspacing="0" cellpadding="0" width="159">
 		<tr>
 			<td class="Depth03">
-				<a href="/app/product/listProduct?menu=search" target="rightFrame">상 품 검 색</a>
+				<a href="/product/listProduct?menu=search" target="rightFrame">상 품 검 색</a>
 			</td>
 		</tr>
 		<%
@@ -105,12 +105,12 @@ function history(){
 		%>
 		<tr>
 			<td class="Depth03">
-				<a href="/app/purchase/listPurchase" target="rightFrame">구매이력조회</a>
+				<a href="/purchase/listPurchase" target="rightFrame">구매이력조회</a>
 			</td>
 		</tr>
 		<tr>
 			<td class="Depth03">
-				<a href="/app/user/getCartList" target="rightFrame">장바구니조회</a>
+				<a href="/user/getCartList" target="rightFrame">장바구니조회</a>
 			</td>
 		</tr>
 		<%
@@ -135,11 +135,11 @@ function history(){
 <table> 
 		<tr><td class="Depth03"><center><h3>인기상품순위</h3></center></td>
 	<c:if test="${lankList != null && lankProdNameList != null}">	
-		<tr><td class="Depth03"><a href="/app/product/getProduct?prodNo=${lankList[0]}&menu=search" target="rightFrame">1  ${lankProdNameList[0]}</a></td></tr>
-		<tr><td class="Depth03"><a href="/app/product/getProduct?prodNo=${lankList[1]}&menu=search" target="rightFrame">2  ${lankProdNameList[1]}</a></td></tr>
-		<tr><td class="Depth03"><a href="/app/product/getProduct?prodNo=${lankList[2]}&menu=search" target="rightFrame">3  ${lankProdNameList[2]}</a></td></tr>
-		<tr><td class="Depth03"><a href="/app/product/getProduct?prodNo=${lankList[3]}&menu=search" target="rightFrame">4  ${lankProdNameList[3]}</a></td></tr>
-		<tr><td class="Depth03"><a href="/app/product/getProduct?prodNo=${lankList[4]}&menu=search" target="rightFrame">5  ${lankProdNameList[4]}</a></td></tr>
+		<tr><td class="Depth03"><a href="/product/getProduct?prodNo=${lankList[0]}&menu=search" target="rightFrame">1  ${lankProdNameList[0]}</a></td></tr>
+		<tr><td class="Depth03"><a href="/product/getProduct?prodNo=${lankList[1]}&menu=search" target="rightFrame">2  ${lankProdNameList[1]}</a></td></tr>
+		<tr><td class="Depth03"><a href="/product/getProduct?prodNo=${lankList[2]}&menu=search" target="rightFrame">3  ${lankProdNameList[2]}</a></td></tr>
+		<tr><td class="Depth03"><a href="/product/getProduct?prodNo=${lankList[3]}&menu=search" target="rightFrame">4  ${lankProdNameList[3]}</a></td></tr>
+		<tr><td class="Depth03"><a href="/product/getProduct?prodNo=${lankList[4]}&menu=search" target="rightFrame">5  ${lankProdNameList[4]}</a></td></tr>
 	</c:if>
 </table>
 <hr/>

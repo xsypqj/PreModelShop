@@ -97,7 +97,7 @@ public class UserController {
 		//Model
 		
 		//View
-		modelAndView.setViewName( "redirect:/app/user/getCartList" );
+		modelAndView.setViewName( "redirect:/user/getCartList" );
 		return modelAndView;
 	}//end of deleteCart
 	
@@ -162,7 +162,7 @@ public class UserController {
 		//Model
 		
 		//View
-		modelAndView.setViewName( "redirect:/app/product/listProduct?menu=search&dupl="+dupl+"" );
+		modelAndView.setViewName( "redirect:/product/listProduct?menu=search&dupl="+dupl+"" );
 		return modelAndView;
 	}//end of insertCart
 	
@@ -240,7 +240,7 @@ public class UserController {
 		//Model
 		
 		//view
-		modelAndView.setViewName( "redirect:/app/user/getUser?userId="+user.getUserId());
+		modelAndView.setViewName( "redirect:/user/getUser?userId="+user.getUserId());
 		return modelAndView;
 	}//end of updateUser
 	

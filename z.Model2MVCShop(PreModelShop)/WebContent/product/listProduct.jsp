@@ -26,7 +26,7 @@ function fncGetSearchList(){
 <body bgcolor="#ffffff" text="#000000">
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/app/product/listProduct?menu=${menu}" method="post">
+<form name="detailForm" action="/product/listProduct?menu=${menu}" method="post">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -118,18 +118,18 @@ function fncGetSearchList(){
 		<c:if test="${!empty product.tranCode && menu==\"manage\"}">
 			<c:choose>
 				<c:when test="${product.flag==\"0\"}">
-					<a href="/app/product/updateProductView?prodNo=${product.prodNo}&menu=${menu}&work=0">${product.prodName}</a>
+					<a href="/product/updateProductView?prodNo=${product.prodNo}&menu=${menu}&work=0">${product.prodName}</a>
 				</c:when>
 				<c:when test="${product.tranCode==1 || product.tranCode==2}">
-					<a href="/app/purchase/getPurchase?tranNo=${product.tranNo}&menu=${menu}">${product.prodName}</a>
+					<a href="/purchase/getPurchase?tranNo=${product.tranNo}&menu=${menu}">${product.prodName}</a>
 				</c:when>
 				<c:when test="${product.tranCode==3}">
-					<a href="/app/product/getProduct?prodNo=${product.prodNo}&menu=${menu}&work=0">${product.prodName}</a>
+					<a href="/product/getProduct?prodNo=${product.prodNo}&menu=${menu}&work=0">${product.prodName}</a>
 				</c:when>
 			</c:choose>
 		</c:if>
 		<c:if test="${menu==\"search\"}">
-			<a href="/app/product/getProduct?prodNo=${product.prodNo}&menu=${menu}">${product.prodName}</a>
+			<a href="/product/getProduct?prodNo=${product.prodNo}&menu=${menu}">${product.prodName}</a>
 		</c:if>
 		</td>
 		<td></td>
@@ -143,12 +143,12 @@ function fncGetSearchList(){
 									${dupl}
 						<c:choose>
 							<c:when test="${product.flag==\"0\" && menu==\"search\"}">				
-								<a href="/app/user/insertCart?prodNo=${product.prodNo}">카트에 넣기</a>	
+								<a href="/user/insertCart?prodNo=${product.prodNo}">카트에 넣기</a>	
 									<c:if test="${!empty dupl && dupl==\"success\"}">
-										<a href="/app/user/getCartList?prodNo=${product.prodNo}">추가성공!바로 확인</a>	
+										<a href="/user/getCartList?prodNo=${product.prodNo}">추가성공!바로 확인</a>	
 									</c:if>
 									<c:if test="${!empty dupl && dupl==\"dupl\"}">
-										<a href="/app/user/getCartList?prodNo=${product.prodNo}">중복상품!리스트 확인</a>
+										<a href="/user/getCartList?prodNo=${product.prodNo}">중복상품!리스트 확인</a>
 									</c:if>							
 							</c:when>
 							 
@@ -161,7 +161,7 @@ function fncGetSearchList(){
 						</c:choose>
 						
 						<c:if test="${!empty product.tranCode && product.tranCode==1}">
-									<a href="/app/purchase/updateTranCodeByProd?prodNo=${product.prodNo}&tranCode=${product.tranCode}">배송하기</a>
+									<a href="/purchase/updateTranCodeByProd?prodNo=${product.prodNo}&tranCode=${product.tranCode}">배송하기</a>
 								</c:if>		
 							
 		</td>	

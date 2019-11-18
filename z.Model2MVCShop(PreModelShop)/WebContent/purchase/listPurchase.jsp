@@ -29,7 +29,7 @@ function fncGetSearchList(){
 
 <div style="width: 98%; margin-left: 10px;">
 
-<form name="detailForm" action="/app/purchase/listPurchase" method="post">
+<form name="detailForm" action="/purchase/listPurchase" method="post">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -71,16 +71,16 @@ function fncGetSearchList(){
 	<c:set var="i" value="${i+1}" />
 	<tr class="ct_list_pop">
 		<td align="center">
-			<a href="/app/purchase/getPurchase?tranNo=${purchase.tranNo}">${i}</a>
+			<a href="/purchase/getPurchase?tranNo=${purchase.tranNo}">${i}</a>
 		</td>
 		<td></td>
 		<td align="center">
 		<c:choose>
 			<c:when test="${!empty purchase.tranCode && purchase.tranCode==1}">
-				<a href="/app/purchase/updatePurchaseView?tranNo=${purchase.tranNo}">${purchase.purchaseProd.prodName}</a>
+				<a href="/purchase/updatePurchaseView?tranNo=${purchase.tranNo}">${purchase.purchaseProd.prodName}</a>
 			</c:when>
 			<c:otherwise>
-				<a href="/app/purchase/getPurchase?tranNo=${purchase.tranNo}">${purchase.purchaseProd.prodName}</a>
+				<a href="/purchase/getPurchase?tranNo=${purchase.tranNo}">${purchase.purchaseProd.prodName}</a>
 			</c:otherwise>
 		</c:choose>
 		</td>
@@ -109,7 +109,7 @@ function fncGetSearchList(){
 		<td></td>
 		<td align="center">
 			<c:if test="${!empty purchase.tranCode && purchase.tranCode==2}">
-			<a href="/app/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=${purchase.tranCode}">¹°°ÇµµÂø</a>
+			<a href="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=${purchase.tranCode}">¹°°ÇµµÂø</a>
 			</c:if>
 		</td>
 	</tr>

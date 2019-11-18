@@ -200,7 +200,7 @@ public class PurchaseController {
 		//Model
 		
 		//View
-		modelAndView.setViewName( "redirect:/app/purchase/listPurchase.do" );
+		modelAndView.setViewName( "redirect:/purchase/listPurchase.do" );
 		return modelAndView;
 	}//end of updateTranCode
 	
@@ -218,7 +218,7 @@ public class PurchaseController {
 		//Model
 		
 		//View
-		modelAndView.setViewName( "redirect:/app/product/listProduct?menu=manage" );
+		modelAndView.setViewName( "redirect:/product/listProduct?menu=manage" );
 		return modelAndView;
 	}//end of updateTranCodeByProd
 	

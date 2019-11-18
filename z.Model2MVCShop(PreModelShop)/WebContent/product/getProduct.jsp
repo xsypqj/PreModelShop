@@ -133,12 +133,12 @@
 				<c:choose >
 					
 				<c:when test="${!empty manage && manage != null || work==0}">
-					<a href="/app/product/listProduct?menu=manage">확인</a>
+					<a href="/product/listProduct?menu=manage">확인</a>
 				</c:when>
 				
 				
 				<c:when test="${empty manage && manage == null && !(work==0)}">
-						<a href="/app/purchase/addPurchaseView?prod_no=${product.prodNo}">구매</a>
+						<a href="/purchase/addPurchaseView?prod_no=${product.prodNo}">구매</a>
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23">

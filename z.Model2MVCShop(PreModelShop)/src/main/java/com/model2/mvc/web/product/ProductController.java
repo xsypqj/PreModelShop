@@ -274,7 +274,7 @@ public class ProductController {
 		}
 		
 		//View
-		modelAndView.setViewName( "redirect:/app/product/getProduct?prodNo="+request.getParameter("prodNo")+"&menu="+menu );
+		modelAndView.setViewName( "redirect:/product/getProduct?prodNo="+request.getParameter("prodNo")+"&menu="+menu );
 		return modelAndView;
 	}//end of updateProduct
 	

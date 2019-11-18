@@ -52,7 +52,7 @@ function fncGetUserList(currentPage) {
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/app/user/listUser" method="post">
+<form name="detailForm" action="/user/listUser" method="post">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -128,7 +128,7 @@ function fncGetUserList(currentPage) {
 		<tr class="ct_list_pop">
 			<td align="center">${ i }</td>
 			<td></td>
-			<td align="left"><a href="/app/user/getUser?userId=${user.userId}">${user.userId}</a></td>
+			<td align="left"><a href="/user/getUser?userId=${user.userId}">${user.userId}</a></td>
 			<td></td>
 			<td align="left">${user.userName}</td>
 			<td></td>
@@ -151,7 +151,7 @@ function fncGetUserList(currentPage) {
 			for(int i=1;i<=totalPage;i++){
 		%>
 			<c:forEach var="i" items 
-			<a href="/app/user/listUser?page=<%=i%>"><%=i %></a>
+			<a href="/user/listUser?page=<%=i%>"><%=i %></a>
 		<%
 			}
 		%>	

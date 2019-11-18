@@ -29,7 +29,7 @@ function fncGetSearchList(){
 
 <div style="width: 98%; margin-left: 10px;">
 
-<form name="detailForm" action="/app/user/listPurchase" method="post">
+<form name="detailForm" action="/user/listPurchase" method="post">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -75,7 +75,7 @@ function fncGetSearchList(){
 		</td>
 		<td></td>
 		<td align="center">
-			<a href="/app/product/getProduct?menu=search&prodNo=${product.prodNo}">${product.prodName}</a>
+			<a href="/product/getProduct?menu=search&prodNo=${product.prodNo}">${product.prodName}</a>
 		</td>
 		<td></td>
 		<td align="center">${product.price}</td>
@@ -84,7 +84,7 @@ function fncGetSearchList(){
 		<td></td>
 		<td align="center">${product.manuDate}</td>
 		<td></td>
-		<td align="center"><a href="/app/user/deleteCart?prodNo=${product.prodNo}">장바구니 삭제</a></td>
+		<td align="center"><a href="/user/deleteCart?prodNo=${product.prodNo}">장바구니 삭제</a></td>
 	</tr>
 	
 	
