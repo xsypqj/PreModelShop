@@ -1,28 +1,48 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 
+<!DOCTYPE html>
 <html>
 <head>
-
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<meta charset="EUC-KR">
 <title>Insert title here</title>
 
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="../javascript/calendar.js">
 </script>
 
 <script type="text/javascript">
-<!--
+
+	$(function(){
+		$(".ct_btn01:contains('구매')").bind("click",function(){
+			fncAddPurchase();
+		});
+		$(".ct_btn01:contains('취소')").bind("click",function(){
+			history.go(-1);
+		});
+		$(".ct_input_g[name='dlvyDate']").bind("click",function(){
+			
+			show_calendar($(".ct_input_g[name='dlvyDate']"), $(".ct_input_g[name='dlvyDate']").val());
+		});
+		$($(".ct_write01")[12]).find("img").bind("click",function(){
+			show_calendar($(".ct_input_g[name='dlvyDate']"), $(".ct_input_g[name='dlvyDate']").val());
+		});
+	});
+	
+
 function fncAddPurchase() {
-	document.addPurchase.submit();
+	//document.addPurchase.submit();
+	$("form").attr("method","post").attr("action","/purchase/addPurchase").submit();
 }
--->
+
 </script>
 </head>
 <body>
 
-<form name="addPurchase" method="post" action="/purchase/addPurchase">
-
+<!-- <form name="addPurchase" method="post" action="/purchase/addPurchase"> -->
+<form name="addPurchase">
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
 		<td width="15" height="37">
@@ -184,8 +204,9 @@ function fncAddPurchase() {
 		<td width="200" class="ct_write01">
 			<input 	type="text" readonly="readonly" name="dlvyDate" class="ct_input_g" 
 							style="width: 100px; height: 19px" maxLength="20"/>
-			<img 	src="../images/ct_icon_date.gif" width="15" height="15"	
-						onclick="show_calendar('document.addPurchaseView.receiverDate', document.addPurchaseView.receiverDate.value)"/>
+			<!-- <img 	src="../images/ct_icon_date.gif" width="15" height="15"	
+						onclick="show_calendar('document.addPurchaseView.receiverDate', document.addPurchaseView.receiverDate.value)"/> -->
+			<img 	src="../images/ct_icon_date.gif" width="15" height="15"	/>
 		</td>
 	</tr>
 	<tr>
@@ -203,7 +224,8 @@ function fncAddPurchase() {
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<a href="javascript:fncAddPurchase();">구매</a>
+						<!-- <a href="javascript:fncAddPurchase();"></a> -->
+						구매
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -213,7 +235,8 @@ function fncAddPurchase() {
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<a href="javascript:history.go(-1)">취소</a>
+						<!--<a href="javascript:history.go(-1)"></a>  -->
+						취소
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>

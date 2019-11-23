@@ -2,23 +2,47 @@
     pageEncoding="EUC-KR"%>
 <%@ taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- request로 product 들어옴 --%>
+<!DOCTYPE html>
 <html>
 <head>
+<meta charset="EUC-KR">
 <title>회원정보수정</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="../javascript/calendar.js">
 </script>
 
 <script type="text/javascript">
-<!--
+
+$(function(){
+	$(".ct_btn01:contains('수정')").bind("click",function(){
+		fncAddProduct();
+	});
+	$(".ct_btn01:contains('취소')").bind("click",function(){
+		history.go(-1);
+	});
+	$(".ct_input_g[name='manuDate']").bind("click",function(){
+		
+		show_calendar($(".ct_input_g[name='manuDate']"), $(".ct_input_g[name='manuDate']").val());
+	});
+	$($(".ct_write01")[2]).find("img").bind("click",function(){
+		show_calendar($(".ct_input_g[name='manuDate']"), $(".ct_input_g[name='manuDate']").val());
+	});
+	
+});
+
 function fncAddProduct(){
 	//Form 유효성 검증
- 	var name = document.detailForm.prodName.value;
-	var detail = document.detailForm.prodDetail.value;
-	var manuDate = document.detailForm.manuDate.value;
-	var price = document.detailForm.price.value;
+ 	//var name = document.detailForm.prodName.value;
+	//var detail = document.detailForm.prodDetail.value;
+	//var manuDate = document.detailForm.manuDate.value;
+	//var price = document.detailForm.price.value;
+	var name = $(".ct_input_g[name='prodName']").val()
+	var detail = $(".ct_input_g[name='prodDetail']").val()
+	var manuDate = $(".ct_input_g[name='manuDate']").val()
+	var price = $(".ct_input_g[name='price']").val()
 
 	if(name == null || name.length<1){
 		alert("상품명은 반드시 입력하여야 합니다.");
@@ -36,17 +60,18 @@ function fncAddProduct(){
 		alert("가격은 반드시 입력하셔야 합니다.");
 		return;
 	}
-		
-	document.detailForm.action='/product/updateProduct';
-	document.detailForm.submit();
+	//document.detailForm.action='/product/updateProduct';
+	//document.detailForm.submit();
+	$("form").attr("method","POST").attr("action","/product/updateProduct").submit();
 }
--->
+
 </script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm" method="post" >
+<!-- <form name="detailForm" method="post" > -->
+<form name="detailForm">
 
 <input type="hidden" name="prodNo" value="${product.prodNo}"/>
 <input type="hidden" name="menu" value="manage"/>
@@ -114,8 +139,9 @@ function fncAddProduct(){
 		<td class="ct_write01">
 			<input type="text" readonly="readonly" name="manuDate" value="${product.manuDate}" 	
 						class="ct_input_g" style="width: 100px; height: 19px" maxLength="10" minLength="6">&nbsp;
-						<img src="../images/ct_icon_date.gif" width="15" height="15" 
-									onclick="show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value)" />
+						<!-- <img 	src="../images/ct_icon_date.gif" width="15" height="15" 
+									onclick="show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value)" /> -->
+						<img 	src="../images/ct_icon_date.gif" width="15" height="15" />
 		</td>
 	</tr>
 	<tr>
@@ -159,7 +185,8 @@ function fncAddProduct(){
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-						<a href="javascript:fncAddProduct();">수정</a>
+						<!-- <a href="javascript:fncAddProduct();"></a> -->
+						수정
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -169,7 +196,8 @@ function fncAddProduct(){
 						<img src="/images/ct_btnbg01.gif"width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<a href="javascript:history.go(-1)">취소</a>
+						<!-- <a href="javascript:history.go(-1)"></a> -->
+						취소
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>

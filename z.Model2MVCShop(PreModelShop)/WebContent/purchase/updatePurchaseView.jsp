@@ -1,21 +1,39 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 
-
+<!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-
+<meta charset="EUC-KR">
 <title>구매정보 수정</title>
 
+<link rel="stylesheet" href="/css/admin.css" type="text/css">
+<script src="http://code.jqeury.com/jqeury-2.1.4.min.js"></script>
 <script type="text/javascript" src="../javascript/calendar.js">
+
+$(function(){
+	$(".ct_btn01:contains('취소')").bind("click",function(){
+		history.go(-1);
+	});
+	$(".ct_btn01:contains('수정')").bind("click",function(){
+		$("form").attr("method","post").attr("action","/purchase/updatePurchase)").submit();
+	});
+	$(".ct_input_g[name='dlvyDate']").bind("click",function(){
+		
+		show_calendar($(".ct_input_g[name='dlvyDate']"), $(".ct_input_g[name='dlvyDate']").val());
+	});
+	$($(".ct_write01")[12]).find("img").bind("click",function(){
+		show_calendar($(".ct_input_g[name='dlvyDate']"), $(".ct_input_g[name='dlvyDate']").val());
+	});
+});
+
 </script>
 
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
-
-<form name="updatePurchase" method="post"	action="/purchase/updatePurchase?tranNo=${purchase.tranNo}">
+<!-- <form name="updatePurchase" method="post"	action="/purchase/updatePurchase?tranNo=${purchase.tranNo}"> -->
+<form name="updatePurchase">
 
 <table width="100%" height="37" border="0" cellpadding="0" cellspacing="0">
 	<tr>
@@ -46,6 +64,7 @@
 		<td class="ct_write01">${purchase.buyer.userId}</td>
 		<input type="hidden" name="buyerId" value="${purchase.buyer.userId}">
 		<input type="hidden" name="tranCode" value="${purchase.tranCode}">
+		<input type="hidden" name="tranNo" value="${purchase.tranNo}">
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -115,8 +134,9 @@
 		<td width="200" class="ct_write01">
 			<input type="text" readonly="readonly" name="dlvyDate" class="ct_input_g" 
 						style="width: 100px; height: 19px" maxLength="20" value="${purchase.dlvyDate}" />
-				<img 	src="../images/ct_icon_date.gif" width="15" height="15"	
-							onclick="show_calendar('document.updatePurchaseView.dlvyDate', document.updatePurchaseView.dlvyDate.value)"/>
+				<!-- <img 	src="../images/ct_icon_date.gif" width="15" height="15"	
+						onclick="show_calendar('document.addPurchaseView.receiverDate', document.addPurchaseView.receiverDate.value)"/> -->
+				<img 	src="../images/ct_icon_date.gif" width="15" height="15"	/>
 		</td>
 	</tr>
 	<tr>
@@ -134,7 +154,8 @@
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-					<input type="submit" value="수정"/>
+					<!-- <input type="submit" value="수정"/> -->
+					수정
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -144,7 +165,8 @@
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-					<a href="javascript:history.go(-1)">취소</a>
+					<!-- <a href="javascript:history.go(-1)"></a> -->
+					취소
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23"/>

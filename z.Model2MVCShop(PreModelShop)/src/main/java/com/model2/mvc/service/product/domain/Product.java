@@ -65,7 +65,9 @@ public class Product {
 		return flag;
 	}
 	public void setFlag(String flag) {
-		this.flag = flag.trim();
+		if(flag != null) {
+			this.flag = flag.trim();
+		}//codehaus 기능추가로 if문 추가
 	}
 	public int getTranCode() {
 		return tranCode;

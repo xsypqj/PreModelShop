@@ -111,7 +111,6 @@ public class UserController {
 		String prodNo = "";
 		
 		//Business Logic
-		prodNo = request.getParameter("prodNo");
 		user = (User)session.getAttribute("user");		
 		cartData = (String)( userService.getCartData(prodNo, user.getUserId()) .get("cartData"));
 		if(cartData != null && !cartData.equals("")) {
@@ -158,7 +157,7 @@ public class UserController {
 			dupl = "dupl";
 		}
 		userService.updateCart(prodNo, user.getUserId());
-	
+		
 		//Model
 		
 		//View

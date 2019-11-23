@@ -24,7 +24,7 @@
 	 	INSERT
 		INTO users( user_id , user_name , password , role , ssn, cell_phone, addr, email , reg_date) 
 		VALUES	 (	#{userId} , #{userName} , #{password} , 'user' , #{ssn} , 
-							#{phone} , #{addr} , #{email} , SYSDATE )
+							#{phone} , #{addr:VARCHAR} , #{email:VARCHAR} , SYSDATE )
 	 </insert>
 	 
 	 <!-- SQL : SELECT ONE -->
@@ -39,7 +39,7 @@
 	 <update	id="updateUser"	parameterType="user" >
 	   	UPDATE users
 	   	<set>
-	   		user_name 	= #{userName} ,
+	   		user_name 	= UPPER( #{userName} ),
 			cell_phone	= #{phone},
 			addr 		= #{addr} ,
 			email		= #{email}

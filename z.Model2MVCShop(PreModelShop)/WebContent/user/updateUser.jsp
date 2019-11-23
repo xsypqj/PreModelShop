@@ -1,54 +1,99 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
+<%@ page pageEncoding="EUC-KR"%>
 
-<%@ page import="com.model2.mvc.service.user.domain.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
+<!DOCTYPE html>
 <html>
+
 <head>
-<title>회원정보수정</title>
-
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-
-<script type="text/javascript">
-<!--
-function fncUpdateUser() {
-
-	var name=document.detailForm.userName.value;
+	<meta charset="EUC-KR">
+	<title>회원정보수정</title>
 	
-	if(name == null || name.length <1){
-		alert("이름은  반드시 입력하셔야 합니다.");
-		return;
-	}
+	<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	
+	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript">
+	
+	
+	function fncUpdateUser() {
+	
+		//var name=document.detailForm.userName.value;
+		var name = $("input[name='userName']").val();
 		
-	if(document.detailForm.phone2.value != "" && document.detailForm.phone2.value != "") {
-		document.detailForm.phone.value = document.detailForm.phone1.value + "-" + document.detailForm.phone2.value + "-" + document.detailForm.phone3.value;
-	} else {
-		document.detailForm.phone.value = "";
-	}
+		if(name == null || name.length <1){
+			alert("이름은  반드시 입력하셔야 합니다.");
+			return;
+		}
+		/*	
+		if(document.detailForm.phone2.value != "" && document.detailForm.phone2.value != "") {
+			document.detailForm.phone.value = document.detailForm.phone1.value + "-" + document.detailForm.phone2.value + "-" + document.detailForm.phone3.value;
+		} else {
+			document.detailForm.phone.value = "";
+		}
+		*/
 		
-	document.detailForm.action='/user/updateUser';
-	document.detailForm.submit();
-}
-
-function check_email(frm) {
-	alert
-	var email=document.detailForm.email.value;
-    if(email != "" && (email.indexOf('@') < 1 || email.indexOf('.') == -1)){
-    	alert("이메일 형식이 아닙니다.");
-		return false;
-    }
-    return true;
-}
-
-function resetData() {
-	document.detailForm.reset();
-}
--->
-</script>
+		var value = "";
+		if( $("input[name='phone2']").val() != "" && $("input[name='phone3']").val() != ""){
+			var value = $("option:selected").val() + "-" + $("input[name='phone2']").val() + "-" + $("input[name='phone3']").val();
+		}
+		$("input:hidden[name='phone']").val(value);	
+		//document.detailForm.action='/user/updateUser';
+		//document.detailForm.submit();
+		$("form").attr("method", "POST").attr("action", "/user/updateUser").submit();
+	}
+	
+	$(function(){
+		
+		$("td.ct_btn01:contains('수정')").bind("click", function(){
+			fncUpdateUser();
+		});
+	});
+	/*
+	function check_email(frm) {
+		alert
+		var email=document.detailForm.email.value;
+	    if(email != "" && (email.indexOf('@') < 1 || email.indexOf('.') == -1)){
+	    	alert("이메일 형식이 아닙니다.");
+			return false;
+	    }
+	    return true;
+	}
+	*/
+	$(function(){
+		
+		$("input[name='email']").bind("change", function(){
+			
+			var email = $("input[name='email']").val();
+			
+			if(email != "" && (email.indexOf('@') < 1 || email.indexOf('.') == -1)){
+				alert("이메일 형식이 아닙니다.");
+			}
+			
+		});
+		
+	});
+	/*
+	function resetData() {
+		document.detailForm.reset();
+	}
+	*/
+	
+	$(function(){
+	
+		$("td.ct_btn01:contains('취소')").bind("click", function(){
+			//alert( $("td.ct_btn01:contains('취소')").html() );
+			history.go(-1);
+		});
+		
+	});
+	
+	</script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
+<!-- <form name="detailForm"  method="post" > -->
 <form name="detailForm"  method="post" >
 
 <input type="hidden" name="userId" value="${user.userId}">
@@ -133,21 +178,7 @@ function resetData() {
 							class="ct_input_g" style="width:100px; height:19px"  maxLength="9" >
 			- 
 			<input 	type="text" name="phone3" value="${ ! empty user.phone3 ? user.phone3 : ''}"  
-							class="ct_input_g"  style="width:100px; height:19px"  maxLength="9" >
-			<%-- 
-						<%if (vo.getPhone() != null) {%> 
-							value="<%=vo.getPhone().split("-")[1] %>"
-						<%} %> 
-						${!empty user.Phone}
-						class="ct_input_g" style="width:100px; height:19px"  maxLength="9" >
-			- 
-			<input type="text" name="phone3" 
-						<%if (vo.getPhone() != null) {%> 
-							value="<%=vo.getPhone().split("-")[2] %>"
-						<%} %> 
-						
-						${!empty user.Phone }
-			--%>			
+							class="ct_input_g"  style="width:100px; height:19px"  maxLength="9" >		
 						
 			<input type="hidden" name="phone" class="ct_input_g"  >
 		</td>
@@ -163,8 +194,10 @@ function resetData() {
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td height="26">
+						<!-- <input 	type="text" name="email" value="${user.email}" class="ct_input_g" 
+										style="width:100px; height:19px" onChange="check_email(this.form);"> -->
 						<input 	type="text" name="email" value="${user.email}" class="ct_input_g" 
-										style="width:100px; height:19px" onChange="check_email(this.form);">
+										style="width:100px; height:19px">
 					</td>
 				</tr>
 			</table>
@@ -185,7 +218,8 @@ function resetData() {
 						<img src="/images/ct_btnbg01.gif" width="17" height="23">
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:fncUpdateUser();">수정</a>
+						<!-- <a href="javascript:fncUpdateUser();"></a> -->
+						수정
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -195,7 +229,8 @@ function resetData() {
 						<img src="/images/ct_btnbg01.gif" width="17" height="23">
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:resetData();">취소</a>
+						<!-- <a href="javascript:resetData();"></a> -->
+						취소
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23">

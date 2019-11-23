@@ -1,11 +1,32 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page contentType="text/html; charset=euc-kr" %>
+<%@ page pageEncoding="EUC-KR"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!DOCTYPE html>
 <html>
 <head>
-<title>상품등록</title>
-
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	<meta charset="EUC-KR">
+	<title>상품등록</title>
+	
+	<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	
+	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript">
+	
+		$(function(){
+			
+			$(".ct_btn01:contains('확인')").bind("click", function(){
+				self.location = "/product/listProduct?menu=manage";
+			});
+			
+			$(".ct_btn01:contains('추가등록')").bind("click", function(){
+				self.location = "../product/addProductView.jsp";
+			});
+			
+		});
+				
+	</script>
 
 </head>
 
@@ -91,8 +112,9 @@
 			<!-- 테이블 시작 -->
 			<table border="0" cellspacing="0" cellpadding="0">
 				
-					${product.fileName}
-				
+				<c:forEach var="fileName" items="${imageFile}">
+					<input type="image" src="../../images/uploadFiles/${fileName}">
+				</c:forEach>
 			</table>
 		</td>
 	</tr>
@@ -111,7 +133,8 @@
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="/product/listProduct?menu=manage">확인</a>
+						<!-- <a href="/product/listProduct?menu=manage"></a> -->
+						확인
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -120,7 +143,8 @@
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="../product/addProductView.jsp;">추가등록</a>
+						<!-- <a href="../product/addProductView.jsp"></a> -->
+						추가등록
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>

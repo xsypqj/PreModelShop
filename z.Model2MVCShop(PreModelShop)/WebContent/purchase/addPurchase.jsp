@@ -1,9 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 
+<!DOCTYPE html>
 <html>
 <head>
+<meta charset="EUC-KR">
 <title>Insert title here</title>
+<!-- 확장시 사용할 script
+<script src="http://code.jquery.com/jqeury-2.1.4.min.js"></script>
+<script type="text/javascript">
+
+$(function(){
+	//$("form").attr("action","/purchase/updatePurchaseView?tranNo=0").attr("method","post").submit();
+});
+
+</script>
+ -->
 </head>
 
 <body>

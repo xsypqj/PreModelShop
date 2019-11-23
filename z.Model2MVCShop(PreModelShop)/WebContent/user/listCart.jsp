@@ -1,35 +1,56 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR" %>
+<%@ page pageEncoding="EUC-KR"%>
+
 <%@ taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<!DOCTYPE html>
 <html>
+
 <head>
-<title>구매 목록조회</title>
-
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-
-
-
-<script type="text/javascript">
-<!--
-function fncList(currentPage){
-	document.getElementById("currentPage").value = currentPage;
-	document.detailForm.submit();
-}
-
-function fncGetSearchList(){
-	document.detailForm.submit();
-}
-
--->
-</script>
+	<meta charset="EUC-KR">
+	<title>구매 목록조회</title>
+	
+	<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	
+	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript">
+	
+	function fncList(currentPage){
+		//document.getElementById("currentPage").value = currentPage;
+		//document.detailForm.submit();
+		$("#currentPage").val(currentPage)
+		$("form").attr("method", "POST").attr("action", "/user/listUser").submit();
+	}
+	
+	function fncGetSearchList(){
+		//document.detailForm.submit();
+		$("#currentPage").val(currentPage)
+		$("form").attr("method", "POST").attr("action", "/user/listUser").submit();
+	}
+	
+	$(function(){
+		
+		$(".ct_list_pop td:nth-child(3)").bind("click", function(){	
+			self.location = "/product/getProduct?menu=search&prodNo="+$("#prodNo").val();
+		});
+		
+		$(".ct_list_pop td:nth-child(11)").bind("click", function(){
+			self.location = "/user/deleteCart?prodNo="+$("#prodNo").val();
+		});
+		
+	});
+	
+	
+	
+	</script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
 <div style="width: 98%; margin-left: 10px;">
 
-<form name="detailForm" action="/user/listPurchase" method="post">
+<!-- <form name="detailForm" action="/user/listPurchase" method="post"> -->
+<form name="detailForm">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -69,13 +90,16 @@ function fncGetSearchList(){
 	<c:set var="i" value="0" />
 	<c:forEach var="product" items="${list}">
 	<c:set var="i" value="${i+1}" />
-	<tr class="ct_list_pop">
+	<input type="hidden" id="prodNo" name="prodNo" value="${product.prodNo}"/>
+	<tr class="ct_list_pop"> 
+	 	
 		<td align="center">
 			${i}
 		</td>
-		<td></td>
+		<td></td> 
 		<td align="center">
-			<a href="/product/getProduct?menu=search&prodNo=${product.prodNo}">${product.prodName}</a>
+			<!-- <a href="/product/getProduct?menu=search&prodNo=${product.prodNo}"></a> -->
+			${product.prodName}
 		</td>
 		<td></td>
 		<td align="center">${product.price}</td>
@@ -83,8 +107,8 @@ function fncGetSearchList(){
 		<td align="center">${product.prodDetail}</td>
 		<td></td>
 		<td align="center">${product.manuDate}</td>
-		<td></td>
-		<td align="center"><a href="/user/deleteCart?prodNo=${product.prodNo}">장바구니 삭제</a></td>
+		<td></td>		   <!-- <a href="/user/deleteCart?prodNo=${product.prodNo}"></a> -->
+		<td align="center">장바구니 삭제</td>
 	</tr>
 	
 	

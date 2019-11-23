@@ -57,7 +57,7 @@ public class User {
 	public void setPhone(String phone) {
 		this.phone = phone;
 		/////////////// EL 적용 위해 추가 ///////////
-		if(phone != null && phone.length() !=0 ){
+		if(phone != null && phone.length() !=0 && phone.length() > 11 ){
 			System.out.println("널테스트");
 			phone1 = phone.split("-")[0];
 			phone2 = phone.split("-")[1];

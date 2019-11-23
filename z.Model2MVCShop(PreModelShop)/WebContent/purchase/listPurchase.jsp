@@ -2,34 +2,61 @@
     pageEncoding="EUC-KR"%>
 <%@ taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<!DOCTYPE html>
 <html>
 <head>
+<meta charset="EUC-KR">
 <title>구매 목록조회</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
-
-
-
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-<!--
+
+$(function(){
+		
+		$(".ct_list_pop td:nth-child(3)").bind("click",function(){
+			var tranNo = $(this).find("input[name='tranNo']").val()
+			var tranCode = $(this).find("input[name='tranCode']").val()
+			if(tranCode != null && tranCode == "1"){
+				self.location = "/purchase/updatePurchaseView?tranNo="+tranNo;
+			}else if(tranCode == "2" || tranCode == "3"){
+				self.location = "/purchase/getPurchase?tranNo="+tranNo;
+			}
+		});
+		
+			$(".ct_list_pop td:nth-child(11)").bind("click",function(){
+				if($(this).text().trim() == "물건도착"){
+					alert("d");
+					var tranNo = $(this).closest(".ct_list_pop").children("td:nth-child(3)").find("input[name='tranNo']").val() 
+					var tranCode = $(this).closest(".ct_list_pop").children("td:nth-child(3)").find("input[name='tranCode']").val() 
+					//self.location = "/purchase/updateTranCode?tranNo="+tranNo+"&tranCode="+tranCode;
+				}
+			});
+		
+});
+
+
 function fncList(currentPage){
-	document.getElementById("currentPage").value = currentPage;
-	document.detailForm.submit();
+	//document.getElementById("currentPage").value = currentPage;
+	//document.detailForm.submit();
+	$("#currentPage").val(currentPage);
+	$("form").attr("method","post").attr("action","/purchase/listPurchase").submit();
 }
 
 function fncGetSearchList(){
-	document.detailForm.submit();
+	//document.detailForm.submit();
+	$("form").attr("method","post").attr("action","/purchase/listPurchase").submit();
 }
 
--->
+
 </script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
 <div style="width: 98%; margin-left: 10px;">
-
-<form name="detailForm" action="/purchase/listPurchase" method="post">
+<!-- <form name="detailForm" action="/purchase/listPurchase" method="post"> -->
+<form name="detailForm">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -71,16 +98,20 @@ function fncGetSearchList(){
 	<c:set var="i" value="${i+1}" />
 	<tr class="ct_list_pop">
 		<td align="center">
-			<a href="/purchase/getPurchase?tranNo=${purchase.tranNo}">${i}</a>
+			${i}
 		</td>
 		<td></td>
 		<td align="center">
+		<input type="hidden" name="tranNo" value="${purchase.tranNo}">
+		<input type="hidden" name="tranCode" value="${purchase.tranCode}">
 		<c:choose>
 			<c:when test="${!empty purchase.tranCode && purchase.tranCode==1}">
-				<a href="/purchase/updatePurchaseView?tranNo=${purchase.tranNo}">${purchase.purchaseProd.prodName}</a>
+				<!--<a href="/purchase/updatePurchaseView?tranNo=${purchase.tranNo}"></a>  -->
+				${purchase.purchaseProd.prodName}
 			</c:when>
 			<c:otherwise>
-				<a href="/purchase/getPurchase?tranNo=${purchase.tranNo}">${purchase.purchaseProd.prodName}</a>
+				<!-- <a href="/purchase/getPurchase?tranNo=${purchase.tranNo}">${purchase.purchaseProd.prodName}</a> -->
+				${purchase.purchaseProd.prodName}
 			</c:otherwise>
 		</c:choose>
 		</td>
@@ -93,28 +124,15 @@ function fncGetSearchList(){
 								${!empty purchase.tranCode && purchase.tranCode==2 ? "현재 배송 중 상태입니다." : "" }
 								${!empty purchase.tranCode && purchase.tranCode==3 ? "현재 배송 완료 상태입니다" : "" }
 		
-		<%-- <c:choose>									
-		<c:when test="${purchase.tranCode==0}">
-			"현재구매완료상태 입니다."
-		</c:when>
-		<c:when test="${!empty purchase.tranCode && purchase.tranCode==1}">	
-			"현재배송중상태 입니다."
-		</c:when>
-		<c:when test="${!empty purchase.tranCode && purchase.tranCode==2}">
-			"현재배송완료상태 입니다."
-		</c:when>
-		</c:choose>
-		--%>
 				</td>
 		<td></td>
 		<td align="center">
 			<c:if test="${!empty purchase.tranCode && purchase.tranCode==2}">
-			<a href="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=${purchase.tranCode}">물건도착</a>
+			<!-- <a href="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=${purchase.tranCode}"></a> -->
+			물건도착
 			</c:if>
 		</td>
 	</tr>
-	
-	
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>

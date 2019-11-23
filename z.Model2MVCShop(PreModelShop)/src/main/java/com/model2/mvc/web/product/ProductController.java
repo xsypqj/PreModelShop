@@ -56,10 +56,10 @@ public class ProductController {
 
 	//Method
 	@RequestMapping( value="addProduct", method=RequestMethod.POST )
-
 	public ModelAndView addProduct(HttpServletRequest request)throws Exception {
 		//Field
 		ModelAndView modelAndView = new ModelAndView();
+		List list = new ArrayList();
 		
 		//Business Logic	
 		if(FileUpload.isMultipartContent(request)) {		
@@ -115,6 +115,7 @@ public class ProductController {
 							}else if(i==(size-1)) {
 							product.setFileName(multiFileName);
 							}
+							list.add(fileName);
 							try {
 								File uploadedFile = new File(temDir, fileName);
 								fileItem.write(uploadedFile);
@@ -136,6 +137,7 @@ public class ProductController {
 		}else {
 			System.out.println("인코딩 타입이 multipart/form-data가 아닙니다..");
 		}
+		modelAndView.addObject("imageFile",list);
 		
 		//View
 		modelAndView.setViewName("forward:/product/addProduct.jsp");
@@ -179,16 +181,20 @@ public class ProductController {
 		
 		//Business Logic
 		product = productService.getProduct(Integer.parseInt(request.getParameter("prodNo")));
+		System.out.println(product);
+		if(product.getFileName() != null && !product.getFileName().equals("")) {
 		fileCSV = new StringTokenizer(product.getFileName(),"?");
-		int size = fileCSV.countTokens();
-		for (int i=0; i<size; i++) {
-			imageFile.add(i,fileCSV.nextToken());
+			int size = fileCSV.countTokens();
+			for (int i=0; i<size; i++) {
+				imageFile.add(i,fileCSV.nextToken());
+			}
 		}
-
 		// Cookie + 최근 본 상품
-		for(int i=0; i<request.getCookies().length; i++) {
-			if(request.getCookies()[i].getName().equals("history")) {
-				value += request.getCookies()[i].getValue();
+		if(request.getCookies() != null) {
+			for(int i=0; i<request.getCookies().length; i++) {
+				if(request.getCookies()[i].getName().equals("history")) {
+					value += request.getCookies()[i].getValue();
+				}
 			}
 		}
 		cookie = new Cookie("history",request.getParameter("prodNo")+","+value);
@@ -224,7 +230,7 @@ public class ProductController {
 		Map<String,Object> map = new HashMap<String,Object>();
 		Page resultPage = new Page();
 		int totalCount = 0;
-		
+
 		//Business Logic
 		if(search.getCurrentPage()==0) {
 			search.setCurrentPage(1);

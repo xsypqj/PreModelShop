@@ -1,11 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 
-    <html>
+<!DOCTYPE html>
+<html>
 <head>
+<meta charset="EUC-KR">
 <title>구매상세조회</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+
+$(function(){
+	$(".ct_btn01:contains('확인')").bind("click",function(){
+		self.location = "/purchase/listPurchase";
+	});
+});
+
+</script>
 
 </head>
 
@@ -139,7 +151,8 @@
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-						<a href="/purchase/listPurchase">확인</a>
+						<!-- <a href="/purchase/listPurchase"></a> -->
+						확인
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif"width="14" height="23"/>

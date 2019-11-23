@@ -48,9 +48,9 @@ public class UserServiceImpl implements UserService{
 	public User loginUser(User user) throws Exception {
 			User dbUser=userDAO.findUser(user.getUserId());
 
-			if(! dbUser.getPassword().equals(user.getPassword()))
+			if(! dbUser.getPassword().equals(user.getPassword())) {
 				throw new Exception("로그인에 실패했습니다.");
-			
+			}
 			return dbUser;
 	}
 

@@ -1,32 +1,86 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
-<%@ taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=EUC-KR" %>
+<%@ page pageEncoding="EUC-KR" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	
+<!DOCTYPE html>
 <html>
 <head>
+	<meta charset="EUC-KR">
 	<title>${!empty menu && menu=="manage" ? "상품 관리" : "상품 목록조회"}</title>
 	
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	
+	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript">
+	
+	
+	function fncList(currentPage){
+		//document.getElementById("currentPage").value = currentPage;
+		//document.detailForm.submit();
+		$("#currentPage").val(currentPage);
+		$("form").attr("method","POST").attr("action","/product/listProduct").submit();
+	}
+	
+	function fncGetSearchList(){
+		$("form").attr("method","POST").attr("action","/product/listProduct").submit();
+	}
+	
+	$(function(){
 
-<script type="text/javascript">
-<!--
-function fncList(currentPage){
-	document.getElementById("currentPage").value = currentPage;
-	document.detailForm.submit();
-}
-
-function fncGetSearchList(){
-	document.detailForm.submit();
-}
-
--->
-</script>
+		$(".ct_btn01:contains('검색')").bind("click",function(){
+			fncGetSearchList();
+		});
+			
+		$(".ct_list_pop td:nth-child(3)").bind("click",function(){
+			
+			if($("#menu").val() != null && $("#menu").val()=="manage" ){
+				if($(this).children("#flag").val()== 0 ){
+					self.location = "/product/updateProductView?prodNo="+$(this).children("#prodNo").val()+"&menu="+$("#menu").val()+"&work=0";
+				}
+				if($(this).children("#tranCode").val() == "1" || $(this).children("#tranCode").val() == "2"){
+					self.location = "/purchase/getPurchase?tranNo="+$(this).children("#tranNo").val()+"&menu="+$("#menu").val();
+				}
+				if($(this).children("#tranCode").val() == "3"){
+					self.location = "/product/getProduct?prodNo="+$(this).children("#prodNo").val()+"&menu="+$("#menu").val()+"&work=0";
+				}
+				
+			}
+			if($("#menu").val()=="search" ){
+				self.location = "/product/getProduct?prodNo="+$(this).children("#prodNo").val()+"&menu="+$("#menu").val();
+			}
+		});
+		
+		//==> 여기
+			$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
+			
+			$(".ct_list_pop td:nth-child(9)").children("span:contains('배송하기')").bind("click",function(){			
+				var tranCode = $(this).closest(".ct_list_pop").children("td:nth-child(3)").find("input[name='tranCode']").val()
+				var prodNo = $(this).closest(".ct_list_pop").children("td:nth-child(3)").find("input[name='prodNo']").val()
+				if(tranCode != null &&tranCode == "1"){
+				self.location = "/purchase/updateTranCodeByProd?prodNo="+prodNo+"&tranCode="+tranCode;
+				}
+			}); 
+			$(".ct_list_pop td:nth-child(9)").children("span:contains('카트에 넣기')").bind("click",function(){	
+				self.location = "/user/insertCart?prodNo="+$(this).closest(".ct_list_pop").children("td:nth-child(3)").find("input[name='prodNo']").val();
+			});
+			$(".ct_list_pop td:nth-child(9)").children("span:contains('추가성공!바로 확인')").bind("click",function(){	
+				self.location = "/user/getCartList?prodNo="+$(this).closest(".ct_list_pop").children("td:nth-child(3)").find("input[name='prodNo']").val();
+			});
+			$(".ct_list_pop td:nth-child(9)").children("span:contains('중복상품!리스트 확인')").bind("click",function(){	
+				self.location = "/user/getCartList?prodNo="+$(this).closest(".ct_list_pop").children("td:nth-child(3)").find("input[name='prodNo']").val();
+			});
+				
+	
+	});
+	
+	</script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 <div style="width:98%; margin-left:10px;">
-
-<form name="detailForm" action="/product/listProduct?menu=${menu}" method="post">
+<!-- <form name="detailForm" action="/product/listProduct?menu=${menu}" method="post"> -->
+<form name="detailForm">
+<input type="hidden" id="menu" name="menu" value="${menu}">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -38,11 +92,8 @@ function fncGetSearchList(){
 				<tr>
 					<td width="93%" class="ct_ttl01">
 					
-					
-					
 					${!empty menu && menu=="manage" ? "상품 관리" : "상품 목록조회"}
-					
-					
+								
 					</td>
 				</tr>
 			</table>
@@ -76,7 +127,8 @@ function fncGetSearchList(){
 						<img src="/images/ct_btnbg01.gif" width="17" height="23">
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:fncGetSearchList();">검색</a>
+						<!--<a href="javascript:fncGetSearchList();"></a>  -->
+						검색
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23">
@@ -86,7 +138,6 @@ function fncGetSearchList(){
 		</td>
 	</tr>
 </table>
-
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
@@ -109,12 +160,17 @@ function fncGetSearchList(){
 		
 	<c:set var="i" value="0" />
 	<c:forEach var="product" items="${list}">
-
+	
 	<c:set var="i" value="${i+1}" />
 	<tr class="ct_list_pop">
 		<td align="center">${i}</td>
 		<td></td>
 		<td align="center">
+		<input type="hidden" id="prodNo" name="prodNo" value="${product.prodNo}">
+		<input type="hidden" id="tranNo" name="prodNo" value="${product.tranNo}">
+		<input type="hidden" id="flag" name="flag" value="${product.flag}">
+		<input type="hidden" id="tranCode" name="tranCode" value="${product.tranCode}">
+		<!-- 
 		<c:if test="${!empty product.tranCode && menu==\"manage\"}">
 			<c:choose>
 				<c:when test="${product.flag==\"0\"}">
@@ -131,6 +187,8 @@ function fncGetSearchList(){
 		<c:if test="${menu==\"search\"}">
 			<a href="/product/getProduct?prodNo=${product.prodNo}&menu=${menu}">${product.prodName}</a>
 		</c:if>
+		-->
+		${product.prodName}
 		</td>
 		<td></td>
 		<td align="center">${product.price}
@@ -140,15 +198,20 @@ function fncGetSearchList(){
 		</td>
 		<td></td>
 		<td align="center">
-									${dupl}
+									
+						
 						<c:choose>
-							<c:when test="${product.flag==\"0\" && menu==\"search\"}">				
-								<a href="/user/insertCart?prodNo=${product.prodNo}">카트에 넣기</a>	
-									<c:if test="${!empty dupl && dupl==\"success\"}">
-										<a href="/user/getCartList?prodNo=${product.prodNo}">추가성공!바로 확인</a>	
+							<c:when test="${product.flag==\"0\" && menu==\"search\"}">
+										<!-- <a href="/user/insertCart?prodNo=${product.prodNo}"></a> -->
+										<span>카트에 넣기</span>
+										
+									<c:if test="${!empty dupl && dupl==\"success\"}">	
+										<!-- <a href="/user/getCartList?prodNo=${product.prodNo}"></a> -->
+										<span>추가성공!바로 확인	</span>
 									</c:if>
 									<c:if test="${!empty dupl && dupl==\"dupl\"}">
-										<a href="/user/getCartList?prodNo=${product.prodNo}">중복상품!리스트 확인</a>
+										<!-- <a href="/user/getCartList?prodNo=${product.prodNo}"></a> -->
+										<span>중복상품!리스트 확인</span>
 									</c:if>							
 							</c:when>
 							 
@@ -160,10 +223,14 @@ function fncGetSearchList(){
 							</c:when>
 						</c:choose>
 						
+						
+						
+						<span>
 						<c:if test="${!empty product.tranCode && product.tranCode==1}">
-									<a href="/purchase/updateTranCodeByProd?prodNo=${product.prodNo}&tranCode=${product.tranCode}">배송하기</a>
-								</c:if>		
-							
+									<!-- <a href="/purchase/updateTranCodeByProd?prodNo=${product.prodNo}&tranCode=${product.tranCode}"></a> -->
+									배송하기
+						</c:if>		
+						</span>
 		</td>	
 	</tr>
 		
@@ -177,7 +244,7 @@ function fncGetSearchList(){
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
 		<td align="center">
-		  <input type="hidden" id="currentPage" name="currentPage" value="1"/>
+		  <input type="hidden" id="currentPage" name="currentPage" value=""/>
 			
 			<%--  
 			<c:choose>
