@@ -26,10 +26,9 @@ $(function(){
 		
 			$(".ct_list_pop td:nth-child(11)").bind("click",function(){
 				if($(this).text().trim() == "¹°°ÇµµÂø"){
-					alert("d");
 					var tranNo = $(this).closest(".ct_list_pop").children("td:nth-child(3)").find("input[name='tranNo']").val() 
 					var tranCode = $(this).closest(".ct_list_pop").children("td:nth-child(3)").find("input[name='tranCode']").val() 
-					//self.location = "/purchase/updateTranCode?tranNo="+tranNo+"&tranCode="+tranCode;
+					self.location = "/purchase/updateTranCode?tranNo="+tranNo+"&tranCode="+tranCode;
 				}
 			});
 		

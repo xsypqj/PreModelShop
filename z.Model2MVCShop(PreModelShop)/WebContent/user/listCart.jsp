@@ -31,11 +31,11 @@
 	$(function(){
 		
 		$(".ct_list_pop td:nth-child(3)").bind("click", function(){	
-			self.location = "/product/getProduct?menu=search&prodNo="+$("#prodNo").val();
+			self.location = "/product/getProduct?menu=search&prodNo="+$(this).parent().find("#prodNo").val();
 		});
 		
 		$(".ct_list_pop td:nth-child(11)").bind("click", function(){
-			self.location = "/user/deleteCart?prodNo="+$("#prodNo").val();
+			self.location = "/user/deleteCart?prodNo="+$(this).parent().find("#prodNo").val();
 		});
 		
 	});
@@ -90,14 +90,14 @@
 	<c:set var="i" value="0" />
 	<c:forEach var="product" items="${list}">
 	<c:set var="i" value="${i+1}" />
-	<input type="hidden" id="prodNo" name="prodNo" value="${product.prodNo}"/>
+	
 	<tr class="ct_list_pop"> 
-	 	
 		<td align="center">
 			${i}
 		</td>
 		<td></td> 
 		<td align="center">
+			<input type="hidden" id="prodNo" name="prodNo" value="${product.prodNo}"/>
 			<!-- <a href="/product/getProduct?menu=search&prodNo=${product.prodNo}"></a> -->
 			${product.prodName}
 		</td>

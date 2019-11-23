@@ -38,14 +38,14 @@
 			self.location = "/user/getUser?userId="+$(this).text().trim();
 		});
 		
-		$(".ct_list_pop td:nth-child(3)").css("color","red");	
-		$("h7").css("color","red");
+		//$(".ct_list_pop td:nth-child(3)").css("color","red");	
+		//$("h7").css("color","red");
 		
-		$(".ct_list_pop:nth-child(4n+6)").css("background-color","whitesmoke");
-		console.log ( "console.log" + $(".ct_list_pop:nth-child(1)" ).html() );
+		//$(".ct_list_pop:nth-child(4n+6)").css("background-color","whitesmoke");
+		//console.log ( "console.log" + $(".ct_list_pop:nth-child(1)" ).html() );
 		//console.log ( $(".ct_list_pop:nth-child(2)" ).html() );
 		//console.log ( $(".ct_list_pop:nth-child(3)" ).html() );
-		console.log ( $(".ct_list_pop:nth-child(4)" ).html() ); //==> ok
+		//console.log ( $(".ct_list_pop:nth-child(4)" ).html() ); //==> ok
 		//console.log ( $(".ct_list_pop:nth-child(5)" ).html() ); 
 		//console.log ( $(".ct_list_pop:nth-child(6)" ).html() ); //==> ok
 		//console.log ( $(".ct_list_pop:nth-child(7)" ).html() ); 
