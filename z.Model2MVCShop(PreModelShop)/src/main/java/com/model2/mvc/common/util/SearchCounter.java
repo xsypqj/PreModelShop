@@ -40,7 +40,7 @@ public class SearchCounter {
 	
 	private ProductDAO productDAO;
 	public void setProductService(ProductDAO productDAO) {
-		System.out.println("test");
+		System.out.println(this.getClass());
 		this.productDAO = productDAO;
 	}
 	// SingleTon

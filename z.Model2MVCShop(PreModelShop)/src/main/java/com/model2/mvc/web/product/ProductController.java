@@ -181,7 +181,7 @@ public class ProductController {
 		
 		//Business Logic
 		product = productService.getProduct(Integer.parseInt(request.getParameter("prodNo")));
-		System.out.println(product);
+
 		if(product.getFileName() != null && !product.getFileName().equals("")) {
 		fileCSV = new StringTokenizer(product.getFileName(),"?");
 			int size = fileCSV.countTokens();
@@ -230,7 +230,7 @@ public class ProductController {
 		Map<String,Object> map = new HashMap<String,Object>();
 		Page resultPage = new Page();
 		int totalCount = 0;
-
+		
 		//Business Logic
 		if(search.getCurrentPage()==0) {
 			search.setCurrentPage(1);

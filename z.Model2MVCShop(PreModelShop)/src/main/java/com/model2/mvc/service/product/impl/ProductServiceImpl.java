@@ -26,7 +26,7 @@ public class ProductServiceImpl implements ProductService{
 	
 	//Constructor
 	public ProductServiceImpl() {
-		System.out.println("productServiceImpl Constructor() start.....");
+		System.out.println(this.getClass());
 	}
 	
 	//Method
@@ -39,7 +39,6 @@ public class ProductServiceImpl implements ProductService{
 	}
 	
 	public Map<String, Object> getProductList(Search search) throws Exception {		
-		System.out.println("< <<search Debug :: "+search+">> >");
 		List<Object> list = productDAOImpl.getProductList(search);
 		int totalCount = productDAOImpl.getTotalCount(search);
 		

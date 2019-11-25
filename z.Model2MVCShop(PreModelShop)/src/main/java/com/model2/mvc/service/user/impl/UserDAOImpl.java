@@ -31,12 +31,11 @@ public class UserDAOImpl implements UserDAO{
 	
 	//Constructor
 	public UserDAOImpl(){
-		System.out.println("UserDAOImpl() Constructorstart.....");
+		System.out.println(this.getClass());
 	}
 	
 	//Method
 	public void insertUser(User user) throws Exception {	
-		System.out.println(user);
 		sqlSession.insert("UserMapper.addUser",user);
 	}	
 		

@@ -32,6 +32,7 @@ public class PurchaseDAOImpl implements PurchaseDAO{
 	
 	///Constructor
 	public PurchaseDAOImpl() {
+		System.out.println(this.getClass());
 	}
 	
 	///Method

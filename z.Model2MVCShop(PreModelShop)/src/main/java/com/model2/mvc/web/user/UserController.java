@@ -133,7 +133,7 @@ public class UserController {
 	public ModelAndView getUser(@RequestParam("userId") String userId) throws Exception {
 		//Field
 		ModelAndView modelAndView = new ModelAndView();
-		
+		System.out.println("getUser");
 		//Business Logic
 		
 		//Model

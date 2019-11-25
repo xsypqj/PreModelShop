@@ -18,7 +18,7 @@ public class Page {
 		this.totalCount = totalCount;
 		this.pageUnit = pageUnit;
 		this.pageSize = pageSize;
-		System.out.println(currentPage+","+totalCount+","+pageUnit+","+pageSize);
+		//System.out.println(currentPage+","+totalCount+","+pageUnit+","+pageSize);
 		/* currentPage는 2번째 공식에서 결정함 */
 		
 		/* 총갯수는 보여지지만 서치데이터가 없을 경우 안보여주는 경우의 수 */

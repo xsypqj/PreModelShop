@@ -83,6 +83,10 @@
 		
 	});
 	
+	$(function(){
+		alert("d");
+	});
+	
 	/*
 	function check_email(frm) {
 		alert

@@ -24,7 +24,7 @@ public class ProductDAOImpl implements ProductDAO{
 	
 	//Constructor
 	public ProductDAOImpl() {
-		System.out.println("productDAOImpl Constructor() start.....");
+		System.out.println(this.getClass());
 	}
 	
 	//Method
@@ -49,7 +49,6 @@ public class ProductDAOImpl implements ProductDAO{
 	}
 	
 	public List<String> getCartList(String cart) throws Exception {
-		System.out.println("=========================> ฐ๘"+cart+"น้");
 		return sqlSession.selectList("ProductMapper.getCartList", cart);
 	}
 	

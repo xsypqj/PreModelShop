@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService{
 	
 	//Constructor
 	public UserServiceImpl() {
-		System.out.println("UserServiceImpl() Constructor start.....");
+		System.out.println(this.getClass());
 	}
 	
 	//Method
@@ -59,7 +59,6 @@ public class UserServiceImpl implements UserService{
 	}
 
 	public Map<String,Object> getUserList(Search search) throws Exception {
-		System.out.println("여기 시작");
 		Map<String,Object> map = new HashMap<String,Object>();
 		List<Object> list = userDAO.getUserList(search);
 		int totalCount = userDAO.getTotalCount(search);
@@ -102,10 +101,8 @@ public class UserServiceImpl implements UserService{
 			cartData += prodNo+",";
 		}
 		String[] strArray;	
-		System.out.println("cartData :: "+cartData);
 		if(userDAO.getCartData(userId) != null) {
 			searchCartData = userDAO.getCartData(userId)+",";
-			System.out.println("adfsjklf :: "+searchCartData);
 			strArray = searchCartData.split(",");
 			for(int i=0; i<strArray.length; i++) {
 				if(strArray[i].equals(prodNo)) {
@@ -117,19 +114,18 @@ public class UserServiceImpl implements UserService{
 			}else {
 				cartData += searchCartData;
 			}
-			for(Object obj : strArray) {
-				System.out.println("strArray :: "+obj);
-			}
+			//for(Object obj : strArray) {
+			//	System.out.println("strArray :: "+obj);
+			//}
 		}
 		
-		System.out.println("컷팅전 : "+cartData);
 		if(cartData.length() > 0) {
 		cartData = cartData.substring(0,cartData.lastIndexOf(","));
 			if(cartData.substring(cartData.length()-1).equals(",")) {
 				cartData = cartData.substring(0,cartData.lastIndexOf(","));
 			}
 		}
-		System.out.println("cartData :: "+cartData);
+		//System.out.println("cartData :: "+cartData);
 		
 		map.put("cartData", cartData);
 		map.put("door", door);
@@ -148,9 +144,9 @@ public class UserServiceImpl implements UserService{
 	
 	public void deleteCart(String userId, String prodNo) throws Exception{
 		String[] parse = ((String)this.getCartData(prodNo, userId).get("cartData")).split(",");
-		System.out.println("parse[0]::"+parse[0]);
+		//System.out.println("parse[0]::"+parse[0]);
 		String resultCart="";
-		System.out.println("parse.length"+parse.length);
+		//System.out.println("parse.length"+parse.length);
 		for(int i=0; i<parse.length; i++) {
 			
 			if(!parse[i].equals(prodNo)) {
@@ -160,7 +156,7 @@ public class UserServiceImpl implements UserService{
 		if(resultCart.lastIndexOf(",") > 0) {
 		resultCart = resultCart.substring(0,resultCart.lastIndexOf(","));
 		}
-		System.out.println("resultCart ==============================> "+resultCart);
+		//System.out.println("resultCart ==============================> "+resultCart);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("cartData", resultCart);
 		map.put("userId", userId);
@@ -170,7 +166,7 @@ public class UserServiceImpl implements UserService{
 	@PostConstruct
 	public void init() {
 		SearchCounter.getSearchCounter().setProductService(productDAO);
-		System.out.println("init() Method start.....");
+		System.out.println("Method com.model2.mvc.service.user.impl.UserServiceImpl.init()");
 		SearchCounter.getSearchCounter().makeCountMap();
 	}
 	

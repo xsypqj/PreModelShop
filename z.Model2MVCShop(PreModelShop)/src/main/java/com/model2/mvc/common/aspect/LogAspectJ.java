@@ -32,4 +32,12 @@ public class LogAspectJ {
 		return obj;
 	}
 	
+	public Object invoke01(ProceedingJoinPoint joinPoint) throws Throwable {
+		
+		System.out.println(joinPoint.getTarget().getClass().getName());
+		Object obj = joinPoint.proceed();
+		
+		return obj;
+	}
+	
 }//end of class

@@ -22,7 +22,7 @@
 	}
 	
 	function fncGetSearchList(){
-		$("form").attr("method","POST").attr("action","/product/listProduct").submit();
+		fncList(1);
 	}
 	
 	$(function(){
@@ -116,7 +116,7 @@
 				<option value="2" ${!empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>상품가격</option>
 		
 			</select>
-			<input type="text" name="searchKeyword"  value="${!empty search.searchKeyword && search.searchKeyword != null ? search.searchKeyword : ""}"
+			<input type="text" name="searchKeyword"  value="${!empty search.searchKeyword && search.searchKeyword != null ? search.searchKeyword : ''}"
 										class="ct_input_g" style="width:200px; height:19px" />
 		</td>
 				

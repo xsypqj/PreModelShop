@@ -22,13 +22,14 @@ public class PurchaseServiceImpl implements PurchaseService {
 	///Field
 	@Autowired
 	@Qualifier("purchaseDAOImpl")
-	private PurchaseDAOImpl purchaseDAO;
-	public void setPurchaseDAO(PurchaseDAOImpl purchaseDAO) {
+	private PurchaseDAO purchaseDAO;
+	public void setPurchaseDAO(PurchaseDAO purchaseDAO) {
 		this.purchaseDAO = purchaseDAO;
 	}
 	
 	///Constructor
-	public PurchaseServiceImpl() {	
+	public PurchaseServiceImpl() {
+		System.out.println(this.getClass());
 	}
 	
 	///Method

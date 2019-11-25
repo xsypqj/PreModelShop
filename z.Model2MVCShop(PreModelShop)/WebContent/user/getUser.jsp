@@ -14,17 +14,21 @@
 	
 	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript">
-	
+/*	
 		$(function(){
-			
+			alert("d");
 			$("td.ct_btn01:contains('확인')").bind("click", function(){
 				history.go(-1);
 			});
 			
 			$("td.ct_btn01:contains('수정')").bind("click", function(){
-				self.location = "/user/updateUser?userId=${user.userId}";
+				self.location = "/user/updateUser?userId="+$("#userId");
 			});
 							
+		});
+*/		
+		$(function(){
+			alert("d");
 		});
 		
 	</script>
@@ -32,7 +36,7 @@
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
-
+<input type="hidden" name="userId" id="userId" value="${user.userId}">
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
 		<td width="15" height="37">

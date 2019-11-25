@@ -15,7 +15,7 @@
 	<script type="text/javascript">
 		// contains 안써도 되는데 연습할겸 한번써봄
 		$(function(){
-			var userId = ${user.userId};
+			var userId = $("body input[name='userId']").val()
 			$("#update:contains('수정')").bind("click", function(){
 				self.location = "/user/updateUserView?userId="+userId;
 			});
@@ -31,7 +31,7 @@
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
-
+<input type="hidden" name="userId" value="${user.userId}">
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
 		<td width="15" height="37">
