@@ -9,83 +9,89 @@
 <head>
 	<meta charset="EUC-KR">
 	
-	<title>아이디 중복 확인</title>
+	<title>계좌이체</title>
 
 	<link rel="stylesheet" href="/css/admin.css" type="text/css">
 	
 	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript">
+	
+		$(function(){
+			document.getElementById("userId").value = opener.document.getElementById("userId").value;
+				$(".ct_ttl02").html("<h4>"+$("#userId").val()+"원 결제하기</h4>");
+			$("td.ct_btn:contains('충전하기')").bind("click", function(){
+				
+				if( $("#money").val() != null && $("#money").val().length > 0){
 
-		$(function(){
-			
-			$("#userId").focus();
-			$("#userId").bind("keyup", function(event){
-				var id = $("#userId").val();
-				$.ajax(
-					{	url : "/user/json/checkDuplication" ,
-						method : "POST" ,
-						dataType : "json" ,
-						headers : {
-							"Accept" : "application/json" ,
-							"Content-Type" : "application/json"
-						} ,
-						data : JSON.stringify({
-							userId : id
-						}) ,
-						success : function(JSONData, status){
-							var data = JSONData.userId+"는 사용";
-							var result = (JSONData.result) ? "" : "이 불";
-							$(".ct_ttl02").text(data+result+"가능 합니다." );
-			
-						}
-					}
-				)
-				
-				//if(event.keyCode == '13'){
-					//fncCheckDuplication();
-				//}
-				
-			});
-			
-		});
-	
-		$(function(){
-			
-			$("td.ct_btn:contains('중복확인')").bind("click", function(){
-				
-				if( $("#userId").val() != null && $("#userId").val().length > 0){
-					$("form").attr("method","POST");
-					$("form").attr("action","/user/checkDuplication");
-					$("form").submit();
+					$.ajax(
+							{
+								url : "/purchase/json/accountTransfer" ,
+								method : "POST" ,
+								dataType : "json" ,
+								headers : {
+									"Accept" : "application/json" ,
+									"Content-Type" : "application/json"
+								} ,
+								data : JSON.stringify({
+									userId : $("#userId").val() , 
+									command : '1' ,
+									money : $("#money").val()
+								}) ,
+								success : function(JSONData, status){
+
+									if(JSONData.approval == "200"){
+									var displayValue = "<h4>"
+															+JSONData.money+"원 포인트충전이 완료되었습니다.<br/>"
+															+"'"+JSONData.userName+"' 님의 계좌 잔액은 "
+															+JSONData.balance+"원 입니다."
+															+"</h4>";
+									}else if(JSONData.approval == "500"){
+										var displayValue = "<h4>"
+															+"'"+JSONData.userName+"' 회원님의 잔액이 부족합니다.<br/>"
+															+"현재 잔액은 "+JSONData.balance+"원 입니다.";
+									}else{
+										var displayValue = "<h4>"
+															+"이미 계좌가 있습니다. <br/>"
+															+"예금주를 확인해 주세요."
+									}
+									$(".ct_ttl02").html(displayValue);
+									
+									if(JSONData.approval == "200"){
+									var path = '<td width="17" height="23">'
+												+'<img src="/images/ct_btnbg01.gif" width="17" height="23"/>'
+												+'</td>'
+												+'<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">'
+												+'확인'
+												+'</td>'
+												+'<td width="14" height="23">'
+												+'<img src="/images/ct_btnbg03.gif" width="14" height="23"/>'
+												+'</td>';
+									}else if(JSONData.approval == "500"){
+										var path = "";
+									}
+									$("#check").html(path);
+								}//end of Call Back Function
+							}//end of setting
+					);//end of ajax
+					
 				}else{
-					alert('아이디는 반드시 입력하셔야 합니다.');
+					alert('예금주/이체금액은 반드시 입력하셔야 합니다.');
 				}
-				$("#userId").focus();
+				$("#money").focus();
 			});
 			
-		});
-	
-		$(function(){
-			
-			$("td.ct_btn01:contains('사용')").bind("click", function(){
-			
-			if(opener){
-				opener.$("input[name='userId']").val("${userId}");
-				opener.$("input[name='password']").focus();
-			}
-			
-			window.close();
-			});
-			
-		});
-		
-		$(function(){
-			
-			$("td.ct_btn01:contains('닫기')").bind("click", function(){
+			$("#check").bind("click", function(){
+				if(opener){
+					opener.window.parent.document.location.reload();
+				}
 				window.close();
 			});
 			
-		});
+			$(".ct_btn01:contains('닫기')").bind("click", function(){
+				window.close();
+			});
+		});//end of function
+	
 	</script>
 	
 </head>
@@ -94,7 +100,7 @@
 
 <form>
 <input type="hidden" name="name" value=""/>
-
+<input type="hidden" id="userId">
 <!-- 타이틀 시작 -->
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -104,7 +110,7 @@
 		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td width="93%" class="ct_ttl01">ID중복확인</td>
+					<td width="93%" class="ct_ttl01">계좌이체</td>
 					<td width="20%" align="right">&nbsp;</td>
 				</tr>
 			</table>
@@ -128,9 +134,8 @@
 					<td class="ct_ttl02">
 						
 						<c:if test="${	! empty result }">
-							${userId} 는 사용
-							${result ? "" : "이 불" }가능 합니다.
-							
+							상품결제 금액 ${account.money}원 계좌이체가 완료되었습니다.
+							'${account.userName}'님의 계좌 잔액은 ${account.balance}원 입니다.
 						</c:if>
 					
 					</td>
@@ -151,20 +156,16 @@
 	</tr>
 	<tr>
 		<td width="104" class="ct_write">
-			아이디 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle">
+			결제금액 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle">
 		</td>
+		
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
 			<!-- 테이블 시작 -->
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="105">
-	
-					<input type="text" name="userId" id="userId"
-					value="${ ! empty result && result ? userId : '' }"
-					<%-- ★잘못된 접근 : value="${!empty userId ? userId : '' }" 
-							 이유 :: userId에 의미없는 값이 들어가 있다면? 중복체크 방어코딩이 불가능함
-					--%> 
+					<input type="text" name="money" id="money"
 					class="ct_input_g" style="width:100px; height:19px"  maxLength="20" />
 					
 					</td>
@@ -178,7 +179,7 @@
 								</td>
 								<td 	align="center" background="/images/ct_btng02.gif" class="ct_btn" 
 										style="padding-top:3px;">
-									중복확인
+									충전하기
 								</td>
 								<td width="4" height="21">
 									<img src="/images/ct_btng03.gif" width="4" height="21">
@@ -188,6 +189,7 @@
 					</td>
 				</tr>
 			</table>
+			
 			<!-- 테이블 끝 -->
 		</td>
 	</tr>
@@ -203,15 +205,13 @@
 		<td align="center">
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
-				
-					<%-- ★잘못된 접근 : ${!empty result}
-							     이유 :: EndTag가 없고, 블록설정 가독성이 떨어짐 --%>
+					<td id="check"></td>     
 					<c:if test="${ ! empty result && result}"> <%-- boolean값도 NullCheck ? --%>
 					<td width="17" height="23">
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						사용
+						확인
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>

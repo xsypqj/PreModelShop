@@ -14,6 +14,8 @@ import com.model2.mvc.service.product.impl.ProductDAOImpl;
 import com.model2.mvc.service.purchase.PurchaseDAO;
 import com.model2.mvc.service.purchase.PurchaseService;
 import com.model2.mvc.service.purchase.domain.Purchase;
+import com.model2.mvc.service.transfer.domain.Transfer;
+import com.model2.mvc.service.user.UserDAO;
 import com.model2.mvc.service.user.domain.User;
 
 @Service("purchaseServiceImpl")
@@ -25,6 +27,12 @@ public class PurchaseServiceImpl implements PurchaseService {
 	private PurchaseDAO purchaseDAO;
 	public void setPurchaseDAO(PurchaseDAO purchaseDAO) {
 		this.purchaseDAO = purchaseDAO;
+	}
+	@Autowired
+	@Qualifier("userDAOImpl")
+	private UserDAO userDAO;
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
 	}
 	
 	///Constructor
@@ -72,5 +80,65 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 	public int getTotalCount(String buyerId) throws Exception {
 		return purchaseDAO.getTotalCount(buyerId);
+	}
+	
+	public Transfer deposit(Transfer transfer) throws Exception{		
+		// 계좌 조회
+		Transfer dbTransfer = new Transfer();
+		User user = new User();
+		dbTransfer = purchaseDAO.searchAccount(transfer);
+		user = userDAO.findUser(transfer.getUserId());
+		transfer.setUserName(user.getUserName());
+		if(dbTransfer != null && dbTransfer.getUserId().equals(transfer.getUserId())) {
+		
+			if(dbTransfer.getUserName().equals(transfer.getUserName())) {
+				transfer.setBalance(purchaseDAO.searchAccount(transfer).getBalance()+transfer.getMoney());
+				purchaseDAO.depositAccount(transfer);	
+				transfer.setApproval("200");
+			}else {
+				transfer.setApproval("400");
+			}
+			
+		}else {
+			// 처음이라면 : 계좌생성 & 잔액부족 코드
+			purchaseDAO.addAccount(transfer);
+			transfer.setApproval("500");
+		}
+		return transfer;
+	}
+	
+	public Transfer withdrawal(Transfer transfer) throws Exception{
+		// 계좌 조회
+		Transfer dbTransfer = new Transfer();
+		dbTransfer = purchaseDAO.searchAccount(transfer);  
+		if(dbTransfer != null && dbTransfer.getUserId().equals(transfer.getUserId())) {
+			// 계좌가 있다면 거래금액 계좌잔액 비교
+			if(dbTransfer.getUserName().equals(transfer.getUserName())) {
+				if(dbTransfer.getBalance() >= transfer.getMoney()) {
+					dbTransfer.setBalance(dbTransfer.getBalance() - transfer.getMoney());
+					int returnValue = purchaseDAO.withdrawalAccount(dbTransfer);				
+					// 인출진행 후 검사
+					if( returnValue == -1 ) {
+						transfer.setApproval("500");
+					}	
+					transfer.setBalance(dbTransfer.getBalance());
+					transfer.setApproval("200");
+				}else {
+					// 잔액부족 코드
+					transfer.setApproval("500");
+				}
+			}else {
+				transfer.setApproval("400");
+			}
+		}else {
+			// 처음이라면 : 계좌생성 & 잔액부족 코드		
+			purchaseDAO.addAccount(transfer);
+			transfer.setApproval("500");
+		}
+		return transfer;
+	}
+	
+	public Transfer getPoint(Transfer transfer) throws Exception {
+		return purchaseDAO.searchAccount(transfer);
 	}
 }//end of class

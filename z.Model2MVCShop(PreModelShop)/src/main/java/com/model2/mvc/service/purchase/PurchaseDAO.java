@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.purchase.domain.Purchase;
+import com.model2.mvc.service.transfer.domain.Transfer;
 
 public interface PurchaseDAO {
 
@@ -25,5 +26,13 @@ public interface PurchaseDAO {
 	public int getTotalCount(String buyerId) throws Exception;
 	
 	public void setFlag(int prodNo) throws Exception;
+	
+	public void addAccount(Transfer transfer) throws Exception;
+	
+	public Transfer searchAccount(Transfer transfer) throws Exception;
+	
+	public int depositAccount(Transfer transfer) throws Exception;
+	
+	public int withdrawalAccount(Transfer transfer) throws Exception;
 
 }

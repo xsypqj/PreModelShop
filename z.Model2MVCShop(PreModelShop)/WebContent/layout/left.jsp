@@ -17,6 +17,46 @@
 	<script type="text/javascript">
 		
 		$( function(){
+			
+			$.ajax(
+					{
+						url : "/purchase/json/getPoint/"+$("#userId").val() ,
+						method : "GET" ,
+						dataType : "json" ,
+						success : function(JSONData, status){
+							$(".Depth03:contains('포인트')").html("<h4>ⓟ "+JSONData.balance+"원</h4>");
+						}//end of Call Back Function
+					}//end of setting
+			);//end of ajax
+			
+			$(".Depth03:contains('충전하기')").bind("click",function(){
+				
+				popWin 
+				= window.open("/user/accountTransfer.jsp",
+											"popWin", 
+											"left=300,top=200,width=300,height=200,marginwidth=0,marginheight=0,"+
+											"scrollbars=no,scrolling=no,menubar=no,resizable=no");
+				
+				$.ajax(
+						{
+							url : "/purchase/json/accountTransfer" ,
+							method : "POST" ,
+							headers : {
+								"Accept" : "application/json" ,
+								"Content-Type" : "application/json"
+							} ,
+							dataType : "json" ,
+							data : {
+								userId : $("#userId").val() ,
+								command : '1' ,
+							} ,
+							success : function(JSONData, status){
+								
+							}//end of Call Back Function
+						}		
+				);//end of ajax
+			});
+			
 			// 개인정보조회		
 			$( ".Depth03:contains('개인정보조회')" ).bind( 'click', function(){
 				$(window.parent.frames["rightFrame"].document.location).attr("href","/user/getUser?userId=${user.userId}");
@@ -69,7 +109,7 @@
 			$( "#name04" ).bind( 'click', function(){
 				$(window.parent.frames["rightFrame"].document.location).attr("href","/product/getProduct?prodNo=${lankList[4]}&menu=search");
 			});
-			
+			$("h3").tooltip();
 		});
 		
 	</script>
@@ -77,7 +117,8 @@
 </head>
 
 <body background="/images/left/imgLeftBg.gif" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"  >
-
+<input type="hidden" id="userId" value="${user.userId}">
+<input type="hidden" id="userName" value="${user.userName}">
 <table width="159" border="0" cellspacing="0" cellpadding="0">
 
 <!--menu 01 line-->
@@ -88,7 +129,6 @@
 		<c:if test="${!empty user}">
 		<tr>
 		<td class="Depth03">
-			<!-- <a href="/user/getUser?userId=${user.userId}" target="rightFrame"></a> -->
 			개인정보조회
 		</td>
 		</tr>
@@ -96,7 +136,6 @@
 		<c:if test="${!empty user.role && user.role==\"admin\"}">	
 		<tr>
 		<td class="Depth03" >
-			<!-- <a href="/user/listUser" target="rightFrame"></a> -->
 			회원정보조회
 		</td>
 		</tr>
@@ -114,12 +153,10 @@
 	<table  border="0" cellspacing="0" cellpadding="0" width="159">
 		<tr>
 			<td class="Depth03">
-				<!-- <a href="../product/addProductView.jsp" target="rightFrame"></a> -->
 				판매상품등록
 			</td>
 		</tr>
 			<td class="Depth03">
-				<!-- <a href="/product/listProduct?menu=manage" target="rightFrame"></a> -->
 				판매상품관리
 			</td>
 		</tr>
@@ -136,7 +173,6 @@
 	<table  border="0" cellspacing="0" cellpadding="0" width="159">
 		<tr>
 			<td class="Depth03">
-				<!-- <a href="/product/listProduct?menu=search" target="rightFrame"></a> -->
 				상 품 검 색
 			</td>
 		</tr>
@@ -144,13 +180,11 @@
 			<c:if test="${user.role==\"user\"}">
 		<tr>
 			<td class="Depth03">
-				<!-- <a href="/purchase/listPurchase" target="rightFrame"></a> -->
 				구매이력조회
 			</td>
 		</tr>
 		<tr>
 			<td class="Depth03">
-				<!-- <a href="/user/getCartList" target="rightFrame"></a> -->
 				장바구니조회
 			</td>
 		</tr>
@@ -161,10 +195,21 @@
 		</tr>
 		<tr>
 			<td class="Depth03">
-				<!-- <td class="Depth03"><a href="javascript:history()"></a> -->
 				최근 본 상품
 			</td>
 		</tr>
+		<tr>
+			<td class="Depth03">
+				포인트
+			</td>
+			<c:if test="${!empty user.userId}">
+			<td class="Depth03">
+				충전하기
+			</td>
+			</c:if>
+		</tr>
+					
+		
 	</table>
 </td>
 </tr>
@@ -173,18 +218,13 @@
 <br/><br/><br/>
 <hr/>
 <table> 
-		<tr><td class="Depth03"><center><h3>인기상품순위</h3></center></td>
-	<c:if test="${lankList != null && lankProdNameList != null}">	
-		<!-- <a href="/product/getProduct?prodNo=${lankList[0]}&menu=search" target="rightFrame"></a> -->
-		<!-- <a href="/product/getProduct?prodNo=${lankList[1]}&menu=search" target="rightFrame"></a> -->
-		<!-- <a href="/product/getProduct?prodNo=${lankList[2]}&menu=search" target="rightFrame"></a> -->
-		<!-- <a href="/product/getProduct?prodNo=${lankList[3]}&menu=search" target="rightFrame"></a> -->
-		<!-- <a href="/product/getProduct?prodNo=${lankList[4]}&menu=search" target="rightFrame"></a> -->
-		<tr><td class="Depth03" id="name00">1  ${lankProdNameList[0]}</td></tr>
-		<tr><td class="Depth03" id="name01">2  ${lankProdNameList[1]}</td></tr>
-		<tr><td class="Depth03" id="name02">3  ${lankProdNameList[2]}</td></tr>
-		<tr><td class="Depth03" id="name03">4  ${lankProdNameList[3]}</td></tr>
-		<tr><td class="Depth03" id="name04">5  ${lankProdNameList[4]}</td></tr>
+		<tr><td class="Depth03"><center><h3 title="상품검색 클릭수">인기상품순위</h3></center></td>
+	<c:if test="${lankList != null && lankProdNameList != null}">
+		<c:set var="i" value="0"/>
+		<c:forEach begin="0" step="1" end="4">
+		<tr><td class="Depth03" id="name0${i}">${i+1}  ${lankProdNameList[i]}</td></tr>
+		<c:set var="i" value="${i+1}"/>
+		</c:forEach>
 	</c:if>
 </table>
 <hr/>

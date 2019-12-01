@@ -26,7 +26,10 @@ public class ProductRestHttpClientApp {
 //		ProductRestHttpClientApp.addProductTest_JsonSimple_Codehaus_POST();
 		
 		// 1.1
-		ProductRestHttpClientApp.getProductTest_JsonSimple_Codehaus_POST();
+//		ProductRestHttpClientApp.getProductTest_JsonSimple_Codehaus_POST();
+		
+		// 1.2
+		ProductRestHttpClientApp.updateProductTest_JsonSimple_Codehaus_POST();
 		
 	}//end of main
 	
@@ -95,5 +98,39 @@ public class ProductRestHttpClientApp {
 		System.out.println(product.toString());
 		
 	}//end of getProductTest_JsonSimple_Codehaus_POST()
-
+	
+	public static void updateProductTest_JsonSimple_Codehaus_POST() throws Exception {
+		//XMLHttpRequest
+		HttpClient httpClient = new DefaultHttpClient();
+		String url = "http://127.0.0.1:8080/product/json/updateProduct";
+		HttpPost httpPost = new HttpPost(url);
+		httpPost.setHeader("Accept","application/json");
+		httpPost.setHeader("Content-Type","application/json");
+		ObjectMapper objectMapper00 = new ObjectMapper();
+		Product product = new Product();
+		
+		//jsonData
+		product.setProdNo(10021);
+		product.setProdName("JSONTest");
+		product.setProdDetail("JSONData 테스트를 위한 상세정보");
+		product.setManuDate("2019-11-26");
+		product.setPrice(50000);
+		String jsonValue = objectMapper00.writeValueAsString(product);
+		HttpEntity requestHttpEntity = new StringEntity(jsonValue,"UTF-8");
+		httpPost.setEntity(requestHttpEntity);
+		
+		//Call Back Function
+		HttpResponse httpResponse = httpClient.execute(httpPost);
+		HttpEntity responseHttpEntity = httpResponse.getEntity();
+		InputStream is = responseHttpEntity.getContent();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is,"UTF-8"));
+		String serverData = br.readLine();
+		ObjectMapper objectMapper01 = new ObjectMapper();
+		JSONObject jsonObj = (JSONObject)JSONValue.parse(serverData);
+		System.out.println(jsonObj.get("product").toString());
+		System.out.println("\n"+jsonObj.get("menu").toString());
+		
+		
+		
+	}//end of updateProductTest_JsonSimple_Codehaus_POST()
 }

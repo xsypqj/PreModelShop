@@ -9,7 +9,6 @@
 	<title>${!empty menu && menu=="manage" ? "상품 관리" : "상품 목록조회"}</title>
 	
 	<link rel="stylesheet" href="/css/admin.css" type="text/css">
-	
 	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript">
 	
@@ -26,9 +25,15 @@
 	}
 	
 	$(function(){
-
+		
 		$(".ct_btn01:contains('검색')").bind("click",function(){
 			fncGetSearchList();
+		});
+		$("input[name='searchKeyword']").keydown(function(key){
+			
+			if(key.keyCode == 13){
+				fncGetSearchList();
+			}
 		});
 			
 		$(".ct_list_pop td:nth-child(3)").bind("click",function(){
@@ -41,11 +46,46 @@
 					self.location = "/purchase/getPurchase?tranNo="+$(this).children("#tranNo").val()+"&menu="+$("#menu").val();
 				}
 				if($(this).children("#tranCode").val() == "3"){
-					self.location = "/product/getProduct?prodNo="+$(this).children("#prodNo").val()+"&menu="+$("#menu").val()+"&work=0";
-				}
+					//self.location = "/product/getProduct?prodNo="+$(this).children("#prodNo").val()+"&menu="+$("#menu").val()+"&work=0";
+					$.ajax(
+							{
+								url : "/product/json/getProduct" ,
+								method : "POST" ,
+								data : JSON.stringify({
+											prodNo : $(this).children("#prodNo").val() ,
+											menu : $("#menu").val() ,
+											work : "0"
+										}) ,
+								dataType : "json" ,
+								headers : {
+									"Accept" : "application/json" ,
+									"Content-Type" : "application/json" 
+								} ,
+								success : function(JSONData, status){
+									var imageFile = "";
+									for(var i=0; i<JSONData.imageFile.length; i++){
+									imageFile += '<img src = "/images/uploadFiles/'+JSONData.imageFile[i]+'" width = "100">&nbsp'
+									}
+									var displayValue = "<h4>"
+														+"상품번호 : "+JSONData.product.prodNo+"<br/>"
+														+"상 품 명 : "+JSONData.product.prodName+"<br/>"
+														+"상품이미지 : <br/>"
+														+imageFile
+														+"<br/>상품상세정보 : "+JSONData.product.prodDetail+"<br/>"
+														+"제조일자 : "+JSONData.product.manuDate+"<br/>"
+														+"가    격 : "+JSONData.product.price+"<br/>"
+														+"등록일자 : "+JSONData.product.regDate;
+									$("h4").remove();
+									$("#"+JSONData.product.prodName+"").html(displayValue);
+								}//end of Call Back Function
+							}//end of setting
+					);//end of ajax	
+
+				}//end of ValidationCheck
 				
 			}
 			if($("#menu").val()=="search" ){
+				window.parent.frames["leftFrame"].document.location.reload();
 				self.location = "/product/getProduct?prodNo="+$(this).children("#prodNo").val()+"&menu="+$("#menu").val();
 			}
 		});
@@ -69,9 +109,11 @@
 			$(".ct_list_pop td:nth-child(9)").children("span:contains('중복상품!리스트 확인')").bind("click",function(){	
 				self.location = "/user/getCartList?prodNo="+$(this).closest(".ct_list_pop").children("td:nth-child(3)").find("input[name='prodNo']").val();
 			});
-				
-	
+			
+			
 	});
+	
+	
 	
 	</script>
 </head>
@@ -122,6 +164,7 @@
 				
 		<td align="right" width="70">
 			<table border="0" cellspacing="0" cellpadding="0">
+			
 				<tr>
 					<td width="17" height="23">
 						<img src="/images/ct_btnbg01.gif" width="17" height="23">
@@ -235,7 +278,7 @@
 	</tr>
 		
 	<tr>
-		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+		<td id="${product.prodName}" colspan="11" bgcolor="D6D7D6" height="1"></td>
 	</tr>
 		</c:forEach>
 </table>

@@ -17,7 +17,11 @@
 
 	$(function(){
 		$(".ct_btn01:contains('구매')").bind("click",function(){
-			fncAddPurchase();
+			if($(".ct_btn:contains('결제완료')").text().trim() == "결제완료"){
+			$("form").attr("method","post").attr("action","/purchase/addPurchase").submit();
+			}else{
+				alert("결제를 진행해 주세요.");
+			}
 		});
 		$(".ct_btn01:contains('취소')").bind("click",function(){
 			history.go(-1);
@@ -29,13 +33,16 @@
 		$($(".ct_write01")[12]).find("img").bind("click",function(){
 			show_calendar($(".ct_input_g[name='dlvyDate']"), $(".ct_input_g[name='dlvyDate']").val());
 		});
+		$(".ct_btn").bind("click",function(){
+			
+			popWin 
+			= window.open("/purchase/accountTransfer.jsp",
+										"popWin", 
+										"left=300,top=200,width=300,height=200,marginwidth=0,marginheight=0,"+
+										"scrollbars=no,scrolling=no,menubar=no,resizable=no");
+					
+		});
 	});
-	
-
-function fncAddPurchase() {
-	//document.addPurchase.submit();
-	$("form").attr("method","post").attr("action","/purchase/addPurchase").submit();
-}
 
 </script>
 </head>
@@ -63,6 +70,7 @@ function fncAddPurchase() {
 </table>
 
 <input type="hidden" name="prodNo" value="${product.prodNo}" />
+<input type="hidden" id="price" value="${product.price}" />
 
 <table width="600" border="0" cellspacing="0" cellpadding="0"	align="center" style="margin-top: 13px;">
 	<tr>
@@ -133,7 +141,7 @@ function fncAddPurchase() {
 			구매자아이디 <img 	src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
 		</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">admin</td>
+		<td class="ct_write01">${user.userId}</td>
 		<input type="hidden" name="buyerId" value="${user.userId}" />
 		<input type="hidden" name="tranNo" value="1"/>
 	</tr>
@@ -145,12 +153,30 @@ function fncAddPurchase() {
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
 			<select 	name="paymentOption"		class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20">
+							style="width: 100px; height: 25px" maxLength="20">
 				<option value="1" selected="selected">현금구매</option>
 				<option value="2">신용구매</option>
 			</select>
+			
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td width="4" height="21">
+						<img src="/images/ct_btng01.gif" width="4" height="21"/>
+					</td>
+					<td 	align="center" background="/images/ct_btng02.gif" class="ct_btn" 
+							style="padding-top:3px;">									
+						결제하기
+					</td>
+					<td width="4" height="21">
+						<img src="/images/ct_btng03.gif" width="4" height="21">
+					</td>
+				</tr>
+			</table>
+			
 		</td>
+		
 	</tr>
+	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -220,6 +246,7 @@ function fncAddPurchase() {
 		<td align="center">
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
+					
 					<td width="17" height="23">
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
@@ -227,6 +254,7 @@ function fncAddPurchase() {
 						<!-- <a href="javascript:fncAddPurchase();"></a> -->
 						구매
 					</td>
+					
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
 					</td>

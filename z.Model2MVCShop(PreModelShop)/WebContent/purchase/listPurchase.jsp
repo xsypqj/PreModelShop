@@ -19,10 +19,47 @@ $(function(){
 			var tranCode = $(this).find("input[name='tranCode']").val()
 			if(tranCode != null && tranCode == "1"){
 				self.location = "/purchase/updatePurchaseView?tranNo="+tranNo;
-			}else if(tranCode == "2" || tranCode == "3"){
+			}else if(tranCode == "2"){
 				self.location = "/purchase/getPurchase?tranNo="+tranNo;
-			}
-		});
+			}else if(tranCode == "3"){
+				var prodNo = $(this).find("input[name='prodNo']").val();
+				$.ajax(
+						{
+							url : "/product/json/getProduct" ,
+							method : "POST" ,
+							dataType : "json" ,
+							headers : {
+								"Accept" : "application/json" ,
+								"Content-Type" : "application/json"
+							} ,
+							data : JSON.stringify({
+								prodNo : prodNo , 
+								menu : 'search'
+							}) ,
+							success : function(JSONData, status){
+								var imageFile = "";
+								for(var i=0; i<JSONData.imageFile.length; i++){
+								imageFile += '<img src = "/images/uploadFiles/'+JSONData.imageFile[i]+'" width = "100">&nbsp'
+								}
+								var displayValue = "<h4>"
+													+"상품번호 : "+JSONData.product.prodNo+"<br/>"
+													+"상 품 명 : "+JSONData.product.prodName+"<br/>"
+													+"상품이미지 : <br/>"
+													+imageFile
+													+"<br/>상품상세정보 : "+JSONData.product.prodDetail+"<br/>"
+													+"제조일자 : "+JSONData.product.manuDate+"<br/>"
+													+"가    격 : "+JSONData.product.price+"<br/>"
+													+"등록일자 : "+JSONData.product.regDate;
+
+								$("h4").remove();
+								$("#"+JSONData.product.prodNo+"").html(displayValue);
+							}//end of Call Back Function
+						}//end of setting
+				);//end of ajax
+			}//end of else if
+			
+		});//end of function
+
 		
 			$(".ct_list_pop td:nth-child(11)").bind("click",function(){
 				if($(this).text().trim() == "물건도착"){
@@ -103,6 +140,7 @@ function fncGetSearchList(){
 		<td align="center">
 		<input type="hidden" name="tranNo" value="${purchase.tranNo}">
 		<input type="hidden" name="tranCode" value="${purchase.tranCode}">
+		<input type="hidden" name="prodNo" value="${purchase.purchaseProd.prodNo}">
 		<c:choose>
 			<c:when test="${!empty purchase.tranCode && purchase.tranCode==1}">
 				<!--<a href="/purchase/updatePurchaseView?tranNo=${purchase.tranNo}"></a>  -->
@@ -122,7 +160,6 @@ function fncGetSearchList(){
 		<td align="center">${!empty purchase.tranCode && purchase.tranCode==1 ? "현재 구매완료 상태입니다." : "" }
 								${!empty purchase.tranCode && purchase.tranCode==2 ? "현재 배송 중 상태입니다." : "" }
 								${!empty purchase.tranCode && purchase.tranCode==3 ? "현재 배송 완료 상태입니다" : "" }
-		
 				</td>
 		<td></td>
 		<td align="center">
@@ -134,7 +171,7 @@ function fncGetSearchList(){
 	</tr>
 	</tr>
 	<tr>
-		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+		<td id="${purchase.purchaseProd.prodNo}" colspan="11" bgcolor="D6D7D6" height="1"></td>
 	</tr>
 	</c:forEach>
 </table>

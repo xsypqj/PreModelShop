@@ -17,8 +17,6 @@
 	
 	// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
 	function fncList(currentPage) {
-		//document.getElementById("currentPage").value = currentPage;
-	   	//document.detailForm.submit();
 	   	$("#currentPage").val(currentPage);
 	   	$("form").attr("method", "POST").attr("action", "/user/listUser").submit();
 	}
@@ -27,16 +25,59 @@
 	   	$("form").attr("method", "POST").attr("action", "/user/listUser").submit();	
 	}
 	
-	// ==> 추가
 	$(function(){
 		
 		$("td.ct_btn01:contains('검색')").bind("click", function(){
 			fncGetUserList(1);
 		});
+		$("input[name='searchKeyword']").keydown(function(key){
+			if(key.keyCode == 13){
+				fncGetUserList(1);
+			}
+		});
 		
+		
+		/* 10번 리팩토링을 위한 주석처리
 		$(".ct_list_pop td:nth-child(3)").bind("click", function(){
 			self.location = "/user/getUser?userId="+$(this).text().trim();
 		});
+		*/
+		$(".ct_list_pop td:nth-child(3)").bind("click",function(){
+			
+			var userId = $(this).text().trim();
+			//Low-Level Interface ( jQuery.ajax() )
+			$.ajax(
+					{	// XMLHttpRequest open
+						url : "/user/json/getUser/"+userId ,
+						method : "GET" ,
+						dataType : "json" ,
+						headers : { // header
+							"Accept" : "application/json",			
+							"Content-Type" : "application/json",			
+						},
+						success : function(JSONData, status){ // Call Back Function 지정
+
+							var displayValue = "<h4>"
+														+"아이디 : "+JSONData.userId+"<br/>"
+														+"이  름 : "+JSONData.userName+"<br/>"
+														+"이메일 : "+JSONData.email+"<br/>"
+														+"ROLE : "+JSONData.role+"<br/>"
+														+"등록일 : "+JSONData.regDate+"<br/>"
+														+'<a href="/user/updateUserView?userId="'+JSONData.userId+'">개인정보수정</a>'
+														+"</h4>";
+							//Debug...
+							//alert(displayValue);
+							$("h4").remove();
+							$("#"+userId+"").html(displayValue); // send( Data ) Call Back Function 구현
+						}
+					});
+			
+		});
+		
+		
+		
+		
+		
 		
 		//$(".ct_list_pop td:nth-child(3)").css("color","red");	
 		//$("h7").css("color","red");
@@ -59,7 +100,6 @@
 
 <div style="width:98%; margin-left:10px;">
 
-<!-- <form name="detailForm" action="/user/listUser" method="post"> -->
 <form name="detailForm">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
@@ -102,7 +142,6 @@
 						<img src="/images/ct_btnbg01.gif" width="17" height="23">
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<!-- <a href="javascript:fncGetUserList('1');"></a> -->
 						검색
 					</td>
 					<td width="14" height="23">
@@ -121,10 +160,7 @@
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
 		<td class="ct_line02"></td>
-		<!-- <td class="ct_list_b" width="150">회원ID</td> -->
-		<td class="ct_list_b" width="150">
-			회원ID<br>
-			<h7>(id click:상세정보)</h7>
+		<td class="ct_list_b" width="150">회원ID</td> 
 		</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">회원명</td>
@@ -140,7 +176,7 @@
 		<c:set var="i" value="${ i+1 }" />
 		<tr class="ct_list_pop">
 			<td align="center">${ i }</td>
-			<td></td>		 <!-- <a href="/user/getUser?userId=${user.userId}"></a> -->
+			<td></td>		
 			<td align="left">${user.userId}</td>
 			<td></td>
 			<td align="left">${user.userName}</td>
@@ -149,7 +185,9 @@
 			</td>		
 		</tr>
 		<tr>
-		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+		<!-- <td colspan="11" bgcolor="D6D7D6" height="1"></td> -->
+		<td id="${user.userId}" colspan="11" bgcolor="D6D7D6" height="1"></td>
+		
 		</tr>
 	</c:forEach>
 </table>

@@ -12,6 +12,7 @@ import javax.naming.Reference;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.http.HttpRequest;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -25,12 +26,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.common.util.SearchCounter;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.product.domain.Product;
+import com.model2.mvc.service.transfer.domain.Transfer;
+import com.model2.mvc.service.user.domain.User;
 
 import jdk.internal.org.objectweb.asm.TypeReference;
 
@@ -51,6 +55,7 @@ public class ProductRestController {
 	
 	//Constructor
 	public ProductRestController() {
+		System.out.println(this.getClass());
 	}
 	
 	@RequestMapping( value="json/listProduct" )
@@ -95,7 +100,7 @@ public class ProductRestController {
 		
 		//Business Logic
 		product = productService.getProduct(Integer.parseInt(jsonMap.get("prodNo")));
-		System.out.println(product);
+		
 		if(product.getFileName() != null && !product.getFileName().equals("")) {
 		fileCSV = new StringTokenizer(product.getFileName(),"?");
 			int size = fileCSV.countTokens();
@@ -124,7 +129,50 @@ public class ProductRestController {
 		map.put("product", product);
 		map.put("menu", jsonMap.get("menu"));
 		map.put("imageFile",imageFile);
-
+		
 		return map;
 	}//end of getProduct
+	
+	@RequestMapping( value="json/updateProduct", method=RequestMethod.POST )
+	public Map updateProduct(@RequestBody Product product, HttpServletRequest request) throws Exception {
+		//Field
+		Map<String,Object> map = new HashMap<String,Object>();
+		String[] getManuDate = null;
+		String manuDate = "";
+		String menu = "";
+		List<String> imageFile = new ArrayList<String>();
+		StringTokenizer fileCSV;
+		Product resultProduct = new Product();
+		System.out.println(""+product.getManuDate());
+		//Business Logic
+		if(product.getManuDate().length() > 8) {		
+			getManuDate = (product.getManuDate()).split("-");	
+			for(int i=0; i<getManuDate.length; i++) {
+				 manuDate += getManuDate[i]; 
+				 product.setManuDate(manuDate);
+			}
+			map.put("manuDate", manuDate);
+		}
+		System.out.println("manuData : "+product.getManuDate());
+		productService.updateProduct(product);
+				
+		if(request.getParameter("manage")!=null) {
+			menu = "manage";
+			map.put("work","0");
+		}
+		resultProduct = productService.getProduct(product.getProdNo());
+		if(product.getFileName() != null && !product.getFileName().equals("")) {
+		fileCSV = new StringTokenizer(product.getFileName(),"?");
+			int size = fileCSV.countTokens();
+			for (int i=0; i<size; i++) {
+				imageFile.add(i,fileCSV.nextToken());
+			}
+		}
+		map.put("product", product);
+		map.put("menu", request.getAttribute("menu"));
+		map.put("imageFile",imageFile);
+		return map;
+	}//end of updateProduct
+	
+	
 }

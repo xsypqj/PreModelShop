@@ -8,24 +8,26 @@
 <title>구매정보 수정</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
-<script src="http://code.jqeury.com/jqeury-2.1.4.min.js"></script>
-<script type="text/javascript" src="../javascript/calendar.js">
-
-$(function(){
-	$(".ct_btn01:contains('취소')").bind("click",function(){
-		history.go(-1);
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../javascript/calendar.js"></script>
+<script type="text/javascript">
+	
+	$(function(){
+		$(".ct_btn01:contains('취소')").bind("click",function(){
+			history.go(-1);
+		});
+		$(".ct_btn01:contains('수정')").bind("click",function(){
+			$("form").attr("method","post").attr("action","/purchase/updatePurchase").submit();
+		});
+		$(".ct_input_g[name='dlvyDate']").bind("click",function(){
+			show_calendar('document.addPurchaseView.receiverDate', document.addPurchaseView.receiverDate.value)
+			//show_calendar($(".ct_input_g[name='dlvyDate']"), $(".ct_input_g[name='dlvyDate']").val());
+		});
+		$($(".ct_write01")[12]).find("img").bind("click",function(){
+			show_calendar('document.addPurchaseView.receiverDate', document.addPurchaseView.receiverDate.value)
+			//show_calendar($(".ct_input_g[name='dlvyDate']"), $(".ct_input_g[name='dlvyDate']").val());
+		});
 	});
-	$(".ct_btn01:contains('수정')").bind("click",function(){
-		$("form").attr("method","post").attr("action","/purchase/updatePurchase)").submit();
-	});
-	$(".ct_input_g[name='dlvyDate']").bind("click",function(){
-		
-		show_calendar($(".ct_input_g[name='dlvyDate']"), $(".ct_input_g[name='dlvyDate']").val());
-	});
-	$($(".ct_write01")[12]).find("img").bind("click",function(){
-		show_calendar($(".ct_input_g[name='dlvyDate']"), $(".ct_input_g[name='dlvyDate']").val());
-	});
-});
 
 </script>
 

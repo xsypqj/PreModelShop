@@ -24,6 +24,11 @@
 		<result property="orderDate" 			column="order_data" 		jdbcType="DATE" />
 		<result property="dlvyDate" 			column="dlvy_date" 			jdbcType="DATE" />
 	</resultMap>
+	<resultMap id="transferMap" type="transfer">
+		<result property="userId" column="USER_ID" jdbcType="VARCHAR"/>
+		<result property="userName" column="USER_NAME" jdbcType="VARCHAR"/>
+		<result property="balance" column="BALANCE" jdbcType="NUMERIC"/>
+	</resultMap>
 	
 	<select id="getPurchase" parameterType="java.lang.Integer" resultMap="purchaseSelectMap">
 		SELECT tran_no,prod_no,buyer_id,payment_option,receiver_name,receiver_phone,demailaddr,dlvy_request,tran_status_code,order_data,dlvy_date
@@ -106,6 +111,31 @@
 	 	UPDATE PRODUCT
 	 	SET flag = 1
 	 	WHERE prod_no = #{prodNo}
+	 </update>
+	 
+	 <select id="searchAccount" parameterType="string" resultMap="transferMap">
+	 	SELECT user_id, user_name, balance 
+	 	FROM ACCOUNT
+	 	WHERE user_id = #{userId}
+	 </select>
+	 
+	 <insert id="addAccount" parameterType="transfer">
+	 	INSERT INTO ACCOUNT
+	 	VALUES (#{userId} , #{userName} , 0)
+	 </insert>
+	 
+	 <update id="depositAccount" parameterType="transfer">
+	 	UPDATE ACCOUNT
+	 	SET balance = #{balance}
+	 	WHERE user_id = #{userId}
+	 		AND user_name = #{userName}
+	 </update>
+	 
+	 <update id="withdrawalAccount" parameterType="transfer">
+	 	UPDATE ACCOUNT
+	 	SET balance = #{balance}
+	 	WHERE user_id = #{userId}
+	 		AND user_name = #{userName}
 	 </update>
 	 
 </mapper>

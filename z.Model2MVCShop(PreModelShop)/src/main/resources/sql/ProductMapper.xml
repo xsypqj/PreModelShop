@@ -77,10 +77,10 @@
 		UPDATE PRODUCT
 		<set> 
 			prod_name = #{prodName} , 
-			prod_detail = #{prodDetail} ,
+			prod_detail = #{prodDetail:VARCHAR} ,
 			manufacture_day = #{manuDate} ,
 			price = #{price} ,
-			image_file = #{fileName}
+			image_file = #{fileName:VARCHAR}
 		</set> 
 		WHERE prod_no = #{prodNo}
 	</update>

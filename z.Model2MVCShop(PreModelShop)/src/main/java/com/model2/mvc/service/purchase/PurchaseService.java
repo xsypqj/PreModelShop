@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.purchase.domain.Purchase;
+import com.model2.mvc.service.transfer.domain.Transfer;
 
 public interface PurchaseService {
 
@@ -21,4 +22,10 @@ public interface PurchaseService {
 	public void updateTranCode(Purchase purchase) throws Exception;
 	
 	public int getTotalCount(String buyerId) throws Exception;
+	
+	public Transfer deposit(Transfer transfer) throws Exception;
+	
+	public Transfer withdrawal(Transfer transfer) throws Exception;
+	
+	public Transfer getPoint(Transfer transfer) throws Exception;
 }

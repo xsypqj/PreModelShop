@@ -20,7 +20,8 @@ $(function(){
 
 <body>
 
-<form name="updatePurchase" action="/purchase/updatePurchaseView?tranNo=0" method="post">
+<!-- <form name="updatePurchase" action="/purchase/updatePurchaseView?tranNo=0" method="post"> -->
+<form name="updatePurchase">
 
 다음과 같이 구매가 되었습니다.
 

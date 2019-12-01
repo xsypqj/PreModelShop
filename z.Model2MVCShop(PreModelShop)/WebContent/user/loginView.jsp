@@ -12,25 +12,7 @@
 	
 	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript">
-		/*
-		function fncLogin() {
-			var id=document.loginForm.userId.value;
-			var pw=document.loginForm.password.value;
-			if(id == null || id.length <1) {
-				alert('ID 를 입력하지 않으셨습니다.');
-				document.loginForm.userId.focus();
-				return;
-			}
-			
-			if(pw == null || pw.length <1) {
-				alert('패스워드를 입력하지 않으셨습니다.');
-				document.loginForm.password.focus();
-				return;
-			}
-		    document.loginForm.submit();
-		}
-		*/
-		
+
 		$(function(){
 			
 			$("#userId").focus();
@@ -44,25 +26,59 @@
 					$("input:text").focus();
 					return;
 				}
-				
-				if(pw = null || pw.length <1 ){
+
+				if(pw == null || pw.length <1 ){
 					alert('패스워드를 입력하지 않으셨습니다.');
 					$("input:password").focus();
 					return;
 				}
+				// 10번 리팩토링을 위한 주석
+				//$("form").attr("method", "POST").attr("action", "/user/login").attr("target","_parent").submit();
 				
-				$("form").attr("method", "POST").attr("action", "/user/login").attr("target","_parent").submit();
-				
-			});
-			
-		});
+				$.ajax(
+					{
+						url : "/user/json/login" ,
+						method : "POST" ,
+						dataType : "json" ,
+						headers : {
+							"Accept" : "application/json" ,
+							"Content-Type" : "application/json"
+						} ,
+						data : JSON.stringify({
+							userId : id,
+							password : pw
+						}) ,
+						success : function(JSONData, status){
+							
+							if( JSONData != null ){
+								//[ 방법1 ]
+								//$(window.parent.document.location).atrr("href","/index.jsp");
+								
+								//[ 방법2 ]
+								window.parent.document.location.reload();
+								
+								//[ 방법3 ]
+								//$(window.parent.frames["topFrame"].document.location).attr("href","/layout/top.jsp");
+								//$(window.parent.frames["leftFrame"].document.location).attr("href","/layout/left.jsp");
+								//$(window.parent.frames["rightFrame"].document.location).attr("href","/user/getUser?userId="+JSONData.userId);
+								
+							}else{
+								alert("아이디, 패스워드를 확인하시고 다시 로그인 해주세요.");
+							}
+						}//end of Call Back Function	
+			});//end of ajax
+		});//end of Login Click
+			$("img[src='/images/btn_add.gif']").bind("click",function(){
+				self.location = "./addUserView.jsp";
+			});//end of Add User Click
+		
+	});//end of function
 	</script>
 	
 </head>
 
 <body bgcolor="#ffffff" text="#000000" >
 
-<!-- <form name="loginForm"  method="post" action="/user/login" target="_parent"> -->
 <form>
 
 <div align="center">
@@ -129,13 +145,12 @@
                           <tr> 
                             <td width="56">
                             	 
-                            	<!-- <a href="javascript:fncLogin();">  -->
                             		<img src="/images/btn_login.gif" width="56" height="20" border="0">
                             	</a>
                             </td>
                             <td width="10">&nbsp;</td>
                             <td width="70">
-                            	<!-- <a href="addUserView.jsp;"> -->
+ 
                             		<img src="/images/btn_add.gif" width="70" height="20" border="0">
                             	</a>
                             </td>

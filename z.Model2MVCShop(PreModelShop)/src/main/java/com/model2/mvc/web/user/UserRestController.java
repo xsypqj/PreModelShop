@@ -60,7 +60,8 @@ public class UserRestController {
 	public User login(@RequestBody User user, HttpSession session) throws Exception {
 		
 		System.out.println("/user/json/login : POST");
-		
+		System.out.println(user.getPassword());
+		System.out.println(user.getUserId());
 		//Business Logic
 		User dbUser = userService.loginUser(user);
 		session.setAttribute("user", dbUser);
@@ -191,16 +192,14 @@ public class UserRestController {
 	}//end of insertCart
 	
 	@RequestMapping( value="json/checkDuplication", method=RequestMethod.POST )
-	public Map<String,Object> checkDuplication(@RequestBody String userId) throws Exception {
-		System.out.println("user/json/checkDuplication : POST");
+	public Map<String,Object> checkDuplication(@RequestBody User user) throws Exception {
 		Map<String,Object> map = new HashMap<String,Object>();
 		boolean result = false;
-			
-		//Business Logic
-		result = userService.checkDuplication(userId);
-		map.put("result", result);
-		map.put("userId", userId);
 
+		//Business Logic
+		result = userService.checkDuplication(user.getUserId());
+		map.put("result", result);
+		map.put("userId", user.getUserId());
 		return map;
 	}//end of checkDuplication
 	

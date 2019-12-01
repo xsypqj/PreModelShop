@@ -8,9 +8,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.model2.mvc.service.user.domain.User;
 
-
-
-
 /*
  * FileName : LogonCheckInterceptor.java
  *  ㅇ Controller 호출전 interceptor 를 통해 선처리/후처리/완료처리를 수행

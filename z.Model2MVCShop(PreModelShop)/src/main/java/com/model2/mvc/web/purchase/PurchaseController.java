@@ -26,6 +26,7 @@ import com.model2.mvc.service.product.domain.Product;
 import com.model2.mvc.service.purchase.PurchaseService;
 import com.model2.mvc.service.purchase.domain.Purchase;
 import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
+import com.model2.mvc.service.transfer.domain.Transfer;
 import com.model2.mvc.service.user.UserService;
 import com.model2.mvc.service.user.domain.User;
 
@@ -120,7 +121,7 @@ public class PurchaseController {
 		return modelAndView;
 	}//end of getPurchase
 	
-	@RequestMapping( value="listPurchase", method=RequestMethod.GET )
+	@RequestMapping( value="listPurchase" )
 	public ModelAndView listPurchase(@ModelAttribute("search") Search search,HttpSession session) throws Exception {
 		//Field
 		ModelAndView modelAndView = new ModelAndView();

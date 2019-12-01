@@ -46,7 +46,9 @@ public class Purchase {
 		return paymentOption;
 	}
 	public void setPaymentOption(String paymentOption) {
+		if(paymentOption != null) {
 		this.paymentOption = paymentOption.trim();
+		}
 	}
 	public String getReceiverName() {
 		return receiverName;
@@ -76,7 +78,9 @@ public class Purchase {
 		return tranCode;
 	}
 	public void setTranCode(String tranCode) {
+		if(tranCode != null) {
 		this.tranCode = tranCode.trim();
+		}
 	}
 	public Date getOrderDate() {
 		return orderDate;
@@ -90,7 +94,7 @@ public class Purchase {
 	public void setDlvyDate(String dlvyDate) {
 		
 		if(dlvyDate != null) {
-			String[] ary = dlvyDate.split(" ");
+			String[] ary = dlvyDate.split("-");
 			this.dlvyDate = ary[0];
 		 }else {
 			this.dlvyDate = dlvyDate;

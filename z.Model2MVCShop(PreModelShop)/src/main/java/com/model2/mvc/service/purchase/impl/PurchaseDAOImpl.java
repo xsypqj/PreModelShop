@@ -17,6 +17,7 @@ import com.model2.mvc.common.Search;
 import com.model2.mvc.service.product.domain.Product;
 import com.model2.mvc.service.purchase.PurchaseDAO;
 import com.model2.mvc.service.purchase.domain.Purchase;
+import com.model2.mvc.service.transfer.domain.Transfer;
 import com.model2.mvc.service.user.domain.User;
 
 @Repository("purchaseDAOImpl")
@@ -71,7 +72,24 @@ public class PurchaseDAOImpl implements PurchaseDAO{
 	public void setFlag(int prodNo) throws Exception {
 		sqlSession.update("PurchaseMapper.setFlag",prodNo);
 	}
+	
 	public void updateTranCodeByProd(Purchase purchase) throws Exception {
 		sqlSession.update("PurchaseMapper.updateTranCodeByProd",purchase);
+	}
+	
+	public void addAccount(Transfer transfer) throws Exception {
+		sqlSession.insert("PurchaseMapper.addAccount",transfer);
+	}
+	
+	public Transfer searchAccount(Transfer transfer) throws Exception {
+		return sqlSession.selectOne("PurchaseMapper.searchAccount",transfer.getUserId());
+	}
+	
+	public int depositAccount(Transfer transfer) throws Exception {
+		return sqlSession.update("PurchaseMapper.depositAccount",transfer);
+	}
+	
+	public int withdrawalAccount(Transfer transfer) throws Exception {
+		return sqlSession.update("PurchaseMapper.withdrawalAccount",transfer);
 	}
 }

@@ -2,6 +2,9 @@
 DROP TABLE transaction;
 DROP TABLE product;
 DROP TABLE users;
+DROP TABLE account;
+DROP TABLE users_history;
+DROP TABLE product_history;
 
 DROP SEQUENCE seq_product_prod_no;
 DROP SEQUENCE seq_transaction_tran_no;
@@ -24,6 +27,12 @@ CREATE TABLE users (
 	PRIMARY KEY(user_id)
 );
 
+CREATE TABLE account (
+	user_id  				VARCHAR2(20)		 NOT NULL REFERENCES users(user_id), 
+	user_name 				VARCHAR2(50)		 NOT NULL, 
+	balance				 	NUMBER				 DEFAULT 0,
+	PRIMARY KEY(user_id)
+);
 
 CREATE TABLE product ( 
 	prod_no 					NUMBER 			NOT NULL,
@@ -50,6 +59,28 @@ CREATE TABLE transaction (
 	order_data 					DATE,
 	dlvy_date 					DATE,
 	PRIMARY KEY(tran_no)
+);
+
+CREATE TABLE users_history (
+	user_id 				VARCHAR2(20)		NOT NULL,
+	user_name 				VARCHAR2(50)		NOT NULL,
+	ssn 					VARCHAR2(13),
+	cell_phone				 VARCHAR2(14),
+	addr 					VARCHAR2(100),
+	email 					VARCHAR2(50),
+	reg_date 				DATE,
+	left_date 				DATE
+);
+
+CREATE TABLE product_history (
+	prod_no			 		NUMBER			 	NOT NULL,
+	prod_name		 		VARCHAR2(100)	 	NOT NULL,
+	prod_detail		 		VARCHAR2(200), 
+	manufacture_day	 		VARCHAR2(8), 
+	price			 		NUMBER(10), 
+	image_file		 		VARCHAR2(100), 
+	buyer_id		 		VARCHAR2(20)	 	NOT NULL,
+	sale_date		 		DATE
 );
 
 tran_status_code			CHAR(3),		NOT NULL REFERENCES transaction(tran_status_code),
@@ -123,7 +154,6 @@ VALUES ( 'user18', 'SCOTT', '1818', 'user', NULL, NULL, NULL, NULL, sysdate);
 INSERT INTO users 
 VALUES ( 'user19', 'SCOTT', '1919', 'user', NULL, NULL, NULL, NULL, sysdate);
            
-           
 	insert into product values (seq_product_prod_no.nextval,'vaio vgn FS70B','소니 바이오 노트북 신동품','20120514',2000000, 'AHlbAAAAtBqyWAAA.jpg',to_date('2012/12/14 11:27:27', 'YYYY/MM/DD HH24:MI:SS'),'0');
 	insert into product values (seq_product_prod_no.nextval,'자전거','자전거 좋아요~','20120514',10000, 'AHlbAAAAvetFNwAA.jpg',to_date('2012/11/14 10:48:43', 'YYYY/MM/DD HH24:MI:SS'),'0');
 	insert into product values (seq_product_prod_no.nextval,'보르도','최고 디자인 신품','20120201',1170000, 'AHlbAAAAvewfegAB.jpg',to_date('2012/10/14 10:49:39', 'YYYY/MM/DD HH24:MI:SS'),'0');
@@ -141,3 +171,50 @@ VALUES ( 'user19', 'SCOTT', '1919', 'user', NULL, NULL, NULL, NULL, sysdate);
 	
 	ALTER TABLE USERS DROP COLUMN cart;	
 	ALTER TABLE USERS ADD (cart VARCHAR2(200));
+	
+INSERT INTO users_history
+VALUES ( 'test01', 'TEST', NULL, NULL, NULL, NULL, sysdate, '2019-11-01');
+
+INSERT INTO users_history
+VALUES ( 'test02', 'TEST', NULL, NULL, NULL, NULL, sysdate, '2019-11-01');
+
+INSERT INTO users_history
+VALUES ( 'test03', 'TEST', NULL, NULL, NULL, NULL, sysdate, '2019-11-01');
+
+INSERT INTO users_history
+VALUES ( 'test04', 'TEST', NULL, NULL, NULL, NULL, sysdate, '2019-11-01');
+
+INSERT INTO users_history
+VALUES ( 'test05', 'TEST', NULL, NULL, NULL, NULL, sysdate, '2019-11-01');
+
+INSERT INTO users_history
+VALUES ( 'test06', 'TEST', NULL, NULL, NULL, NULL, sysdate, '2019-11-01');
+
+INSERT INTO users_history
+VALUES ( 'test07', 'TEST', NULL, NULL, NULL, NULL, sysdate, '2019-11-01');
+
+INSERT INTO users_history
+VALUES ( 'test08', 'TEST', NULL, NULL, NULL, NULL, sysdate, '2019-11-01');
+
+INSERT INTO users_history
+VALUES ( 'test09', 'TEST', NULL, NULL, NULL, NULL, sysdate, '2019-11-01');
+
+INSERT INTO users_history
+VALUES ( 'test10', 'TEST', NULL, NULL, NULL, NULL, sysdate, '2019-11-01');
+
+INSERT INTO users_history
+VALUES ( 'test11', 'TEST', NULL, NULL, NULL, NULL, sysdate, '2019-11-01');
+
+
+
+
+
+
+
+
+
+
+
+
+
+

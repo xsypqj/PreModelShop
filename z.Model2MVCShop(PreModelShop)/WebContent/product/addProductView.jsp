@@ -64,10 +64,12 @@
 	
 		$(".ct_input_g[name='manuDate']").bind("click",function(){
 			
-			show_calendar($(".ct_input_g[name='manuDate']"), $(".ct_input_g[name='manuDate']").val());
+			//show_calendar($(".ct_input_g[name='manuDate']"), $(".ct_input_g[name='manuDate']").val());
+			show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value);
 		});
 		$($(".ct_write01")[2]).find("img").bind("click",function(){
-			show_calendar($(".ct_input_g[name='manuDate']"), $(".ct_input_g[name='manuDate']").val());
+			//show_calendar($(".ct_input_g[name='manuDate']"), $(".ct_input_g[name='manuDate']").val());
+			show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value);
 		});
 	});
 	
@@ -148,7 +150,7 @@
 					  <!-- <img src="../images/ct_icon_date.gif" width="15" height="15" 
 										onclick="show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value)"/>  -->
 				&nbsp;<img src="../images/ct_icon_date.gif" width="15" height="15" /> 
-		</td>  
+		</td>  							
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
