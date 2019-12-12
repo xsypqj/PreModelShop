@@ -1,24 +1,36 @@
 <%@ page contentType="text/html; charset=EUC-KR" %>
 <%@ page pageEncoding="EUC-KR"%>
 
+<!--  ///////////////////////// JSTL  ////////////////////////// -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 
 <head>
 	<meta charset="EUC-KR">
 	
-	<title>아이디 중복 확인</title>
-
-	<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	<!-- 참조 : http://getbootstrap.com/css/   참조 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	
+	<!--  ///////////////////////// CSS ////////////////////////// -->
+	<style></style>
+	
+	<!--  ///////////////////////// JavaScript ////////////////////////// -->
 	<script type="text/javascript">
 
+		//=============  "중복확인"  Event 처리 =============
 		$(function(){
 			
 			$("#userId").focus();
+			
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			$("#userId").bind("keyup", function(event){
 				var id = $("#userId").val();
 				$.ajax(
@@ -33,26 +45,35 @@
 							userId : id
 						}) ,
 						success : function(JSONData, status){
-							var data = JSONData.userId+"는 사용";
-							var result = (JSONData.result) ? "" : "이 불";
-							$(".ct_ttl02").text(data+result+"가능 합니다." );
+							if(JSONData.result != null){
+								if(JSONData.result == true){
+									var used = '<span class="text-success glyphicon glyphicon-ok">사용가능 &nbsp;</span>';
+								}else if(JSONData.result == false){
+									var used = '<span class="text-danger glyphicon glyphicon-remove">사용불가능</span>';
+								}
+								$("span.text-info").remove();
+								$("span.text-success").remove();
+								$("span.text-danger").remove();
+								$("#blank").html(used);
+							}
 			
-						}
-					}
-				)
-				
-				//if(event.keyCode == '13'){
-					//fncCheckDuplication();
-				//}
+						}//end of Call Back Function
+					}//end of setting
+				);//end of ajax
 				
 			});
 			
 		});
-	
+		
+		//=============  "중복확인"  Event 처리 =============
 		$(function(){
 			
-			$("td.ct_btn:contains('중복확인')").bind("click", function(){
+			$("#userId").focus();
+			
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+			$("button.btn.btn-info").bind("click", function(){
 				
+				// Form 유효성 검증
 				if( $("#userId").val() != null && $("#userId").val().length > 0){
 					$("form").attr("method","POST");
 					$("form").attr("action","/user/checkDuplication");
@@ -64,10 +85,12 @@
 			});
 			
 		});
-	
+		
+		
+		//=============  "사용"  Event 처리 =============
 		$(function(){
-			
-			$("td.ct_btn01:contains('사용')").bind("click", function(){
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+			$("button.btn.btn-success").on("click", function(){
 			
 			if(opener){
 				opener.$("input[name='userId']").val("${userId}");
@@ -79,162 +102,65 @@
 			
 		});
 		
+	
+		//=============   "닫기"  Event  처리 =============
 		$(function(){
-			
-			$("td.ct_btn01:contains('닫기')").bind("click", function(){
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+			$("button.btn.btn-primary").on("click", function(){
 				window.close();
 			});
 			
 		});
+		
 	</script>
 	
 </head>
 
-<body bgcolor="#ffffff" text="#000000">
+<body>
 
-<form>
-<input type="hidden" name="name" value=""/>
-
-<!-- 타이틀 시작 -->
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif" width="15" height="37"/>
-		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">ID중복확인</td>
-					<td width="20%" align="right">&nbsp;</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37">
-			<img src="/images/ct_ttl_img03.gif" width="12" height="37"/>
-		</td>
-	</tr>
-</table>
-<!-- 타이틀 끝 -->
-
-<!-- 검색결과 시작 -->
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-	<tr>
-		<td height="32" style="padding-left:12px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:3px;">
-				<tr>
-					<td width="8" style="padding-bottom:3px;">
-						<img src="/images/ct_bot_ttl01.gif" width="4" height="7">
-					</td>
-					<td class="ct_ttl02">
-						
-						<c:if test="${	! empty result }">
-							${userId} 는 사용
-							${result ? "" : "이 불" }가능 합니다.
-							
-						</c:if>
-					
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<tr>
-		<td background="/images/ct_line_ttl.gif" height="1"></td>
-	</tr>
-</table>
-<!-- 검색결과 끝 -->
-
-<!-- 등록 테이블시작 -->
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:13px;">
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			아이디 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle">
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<!-- 테이블 시작 -->
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="105">
+	<!--  화면구성 div Start /////////////////////////////////////-->
+	<div class="container">
 	
-					<input type="text" name="userId" id="userId"
-					value="${ ! empty result && result ? userId : '' }"
-					<%-- ★잘못된 접근 : value="${!empty userId ? userId : '' }" 
-							 이유 :: userId에 의미없는 값이 들어가 있다면? 중복체크 방어코딩이 불가능함
-					--%> 
-					class="ct_input_g" style="width:100px; height:19px"  maxLength="20" />
-					
-					</td>
-					
-					
-					<td>
-						<table border="0" cellspacing="0" cellpadding="0">
-							<tr>
-								<td width="4" height="21">
-									<img src="/images/ct_btng01.gif" width="4" height="21">
-								</td>
-								<td 	align="center" background="/images/ct_btng02.gif" class="ct_btn" 
-										style="padding-top:3px;">
-									중복확인
-								</td>
-								<td width="4" height="21">
-									<img src="/images/ct_btng03.gif" width="4" height="21">
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-			<!-- 테이블 끝 -->
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-</table>
-<!-- 등록테이블 끝 -->
-
-<!-- 버튼 시작 -->
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td align="center">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-				
-					<%-- ★잘못된 접근 : ${!empty result}
-							     이유 :: EndTag가 없고, 블록설정 가독성이 떨어짐 --%>
-					<c:if test="${ ! empty result && result}"> <%-- boolean값도 NullCheck ? --%>
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						사용
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-					</td>
-					</c:if>
-					<td width="30"></td>					
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						닫기
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23">
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
-<!-- 버튼 끝 -->
-
-</form>
+		<br/><br/>
+		
+		<!-- form Start /////////////////////////////////////-->
+		<form class="form-inline">
+		
+			<div class="form-group">
+				<label for="userId">아 이 디</label>
+   				<input type="text" class="form-control" name="userId" id="userId" placeholder="아이디"
+   																						value="${ ! empty result && result ? userId : '' }">
+			</div>
+			<button type="button" class="btn btn-info">중복확인</button>
+			
+			<c:if test="${ ! empty result }">
+				<c:if test="${ result == 'true' }">
+					<button type="button" class="btn btn-success">사 용</button>
+				</c:if>
+			</c:if>
+			
+			<button type="button" class="btn btn-primary">닫 기</button>
+			
+			<c:if test="${ empty result }">
+				<span class="text-info glyphicon glyphicon-ok">입력후중복확인</span>
+			</c:if>
+			
+			<span id="blank"></span>
+			<c:if test="${ ! empty result }">
+				<c:if test="${ result == 'true' }">
+					<span class="text-success glyphicon glyphicon-ok">사용가능 &nbsp;</span>
+				</c:if>
+				<c:if test="${ result == 'false' }">
+					<span class="text-danger glyphicon glyphicon-remove">사용불가능</span>
+				</c:if>			
+			</c:if>
+			
+		</form>
+		<!-- form Start /////////////////////////////////////-->
+		
+	</div>
+	<!--  화면구성 div End /////////////////////////////////////-->
 
 </body>
+
 </html>

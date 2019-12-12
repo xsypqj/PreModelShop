@@ -83,7 +83,7 @@ public class PurchaseRestController {
 		//Business Logic
 		transfer.setUserId(userId);
 		transfer = purchaseService.getPoint(transfer);
-		System.out.println(transfer.toString());
+		
 		return transfer;
 	}//end of getPoint
 }//end of class

@@ -1,23 +1,50 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR" %>
+<%@ page contentType="text/html; charset=EUC-KR" %>
 <%@ page pageEncoding="EUC-KR"%>
 
-<%@ taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!--  ///////////////////////// JSTL  ////////////////////////// -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 
 <!DOCTYPE html>
-<html>
 
+<html lang="ko">
+	
 <head>
 	<meta charset="EUC-KR">
-	<title>구매 목록조회</title>
 	
-	<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	<!-- 참조 : http://getbootstrap.com/css/   참조 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
-	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+	
+	
+	<!-- Bootstrap Dropdown Hover CSS -->
+   <link href="/css/animate.min.css" rel="stylesheet">
+   <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+    <!-- Bootstrap Dropdown Hover JS -->
+   <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
+   
+   
+   <!-- jQuery UI toolTip 사용 CSS-->
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <!-- jQuery UI toolTip 사용 JS-->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
+	<!--  ///////////////////////// CSS ////////////////////////// -->
+	<style>
+	  body {
+            padding-top : 50px;
+        }
+    </style>
+    
+    <!--  ///////////////////////// JavaScript ////////////////////////// -->
 	<script type="text/javascript">
 	
 	function fncList(currentPage){
-		//document.getElementById("currentPage").value = currentPage;
-		//document.detailForm.submit();
 		$("#currentPage").val(currentPage)
 		$("form").attr("method", "POST").attr("action", "/user/listUser").submit();
 	}
@@ -45,89 +72,78 @@
 	</script>
 </head>
 
-<body bgcolor="#ffffff" text="#000000">
+<body>
 
-<div style="width: 98%; margin-left: 10px;">
+<!-- ToolBar Start /////////////////////////////////////-->
+	<jsp:include page="/layout/toolbar.jsp" />
+   	<!-- ToolBar End /////////////////////////////////////-->
+	
+	<!--  화면구성 div Start /////////////////////////////////////-->
+	<div class="container">
+	
+		<div class="page-header text-info">
+	       <h3>장바구니</h3>
+	    </div>
+	    
+	    <!-- table 위쪽 검색 Start /////////////////////////////////////-->
+	    <div class="row">
+	    
+		    
+		    <!-- table 위쪽 검색 Start /////////////////////////////////////-->
+		    
+	 <!--  table Start /////////////////////////////////////-->
+      <table class="table table-hover table-striped" >
+      
+        <thead>
+          <tr>	 
+		    
 
-<!-- <form name="detailForm" action="/user/listPurchase" method="post"> -->
-<form name="detailForm">
-
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37"><img src="/images/ct_ttl_img01.gif"width="15" height="37"></td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">카트 목록조회</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37"><img src="/images/ct_ttl_img03.gif"	width="12" height="37"></td>
-	</tr>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
-	<tr>
-		<td colspan="11">전체 ${totalCount} 건수</td>
-	</tr>
-	<tr>
-		<td class="ct_list_b" width="100">No</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">상품명</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">가격</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b">상품상세정보</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b">제조일자</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b">정보수정</td>
-	</tr>
-	<tr>
-		<td colspan="11" bgcolor="808285" height="1"></td>
-	</tr>
+		 <th align="center">No</th>
+		 <th align="left">상품명</th>
+		 <th align="left">가격</th>
+		 <th align="left">상품상세정보</th>
+		 <th align="left">제조일자</th>
+		 <th align="left">정보수정</th>
+		 </tr>
+        </thead>
+        
+        
+	<tbody>
 		
 	<c:set var="i" value="0" />
 	<c:forEach var="product" items="${list}">
 	<c:set var="i" value="${i+1}" />
 	
-	<tr class="ct_list_pop"> 
+	<tr> 
 		<td align="center">
 			${i}
+			
 		</td>
-		<td></td> 
-		<td align="center">
+		
+		<td align="left">${product.prodName}</td>
+		<td align="left">${product.price}</td>
+		<td align="left">${product.prodDetail}</td>
+		<td align="left">${product.manuDate}</td>
+		<td align="left"장바구니 삭제></td>
+		
+		
 			<input type="hidden" id="prodNo" name="prodNo" value="${product.prodNo}"/>
-			<!-- <a href="/product/getProduct?menu=search&prodNo=${product.prodNo}"></a> -->
-			${product.prodName}
-		</td>
-		<td></td>
-		<td align="center">${product.price}</td>
-		<td></td>
-		<td align="center">${product.prodDetail}</td>
-		<td></td>
-		<td align="center">${product.manuDate}</td>
-		<td></td>		   <!-- <a href="/user/deleteCart?prodNo=${product.prodNo}"></a> -->
-		<td align="center">장바구니 삭제</td>
-	</tr>
-	
-	
-	</tr>
-	
-	<tr>
-		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
-	</tr>
+		
+		</tr>
 	</c:forEach>
-</table>
+</tbody>
+      
+      </table>
+	  <!--  table End /////////////////////////////////////-->
+	  
+ 	</div>
+ 	<!--  화면구성 div End /////////////////////////////////////-->
 	
-
-
-</form>
 <c:if test="${!empty noCart}">
 <p>
 <h5><center>! 카트에 담긴 상품이 없습니다 !</center></h5>
 </p><hr/>
 </c:if>
-</div>
+
 
 </body>

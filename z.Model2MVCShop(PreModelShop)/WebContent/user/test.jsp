@@ -1,62 +1,82 @@
-<!doctype html>
-<html lang="EUC-KR">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-  $( function() {
-    var availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
-    ];
-    $( "#tags" ).autocomplete({
-      source: availableTags
-    });
-  } );
+ 
+  <style>
+  * {
+  	margin: 0;
+  	padding: 0;
+  }
+  
+  body {
+  	font-family: Source Sans Pro;
+  }
+  
+  #sidebar {
+  	position: absolute;
+  	width: 300px;
+  	height: 100%;
+  	background: #000;
+  	left: -300px;
+  	transition: .4s;
+  }
+  
+  #sidebar.active {
+  	left: 0;
+  }
+  
+  #sidebar ul li {
+  	list-style: none;
+  	color: #fff;
+  	font-size: 20px;
+  	padding: 20px 24px;
+  }
+  
+  #sidebar .toggle-btn {
+  	position: absolute;
+  	top: 30px;
+  	left: 330px;
+  	}
+  	
+  	.toggle-btn span {
+  		width: 45px;
+  		height: 4px;
+  		background: #000;
+  		display: block;
+  		margin-top: 4px;
+  		
+  	}
+  
+  </style>
+  
+  <script type="text/javascript">
+  	
+  	
+  		function show() {
+  			document.getElementById('sidebar').classList.toggle('active');
+  		}
+  		
+  	
+  
   </script>
 </head>
 <body>
- 
-<td>
-						<table border="0" cellspacing="0" cellpadding="0">
-							<tr>
-								<td width="4" height="21">
-									<img src="/images/ct_btng01.gif" width="4" height="21"/>
-								</td>
-								<td 	align="center" background="/images/ct_btng02.gif" class="ct_btn" 
-										style="padding-top:3px;">									
-									ID중복확인
-								</td>
-								<td width="4" height="21">
-									<img src="/images/ct_btng03.gif" width="4" height="21">
-								</td>
-							</tr>
-						</table>
-					</td>
 
- 
- 
+<div id="sidebar">
+	<div class="toggle-btn" onclick="show()">
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+	
+	<ul>
+		<li>Home</li>
+		<li>Work</li>
+		<li>About</li>
+		<li>Contact</li>
+	</ul>
+</div>
+
+
 </body>
 </html>

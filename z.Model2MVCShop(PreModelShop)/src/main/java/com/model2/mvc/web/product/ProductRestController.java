@@ -58,19 +58,19 @@ public class ProductRestController {
 		System.out.println(this.getClass());
 	}
 	
-	@RequestMapping( value="json/listProduct" )
+	@RequestMapping( value="json/listProduct", method=RequestMethod.POST )
 	public Map listProduct(@RequestBody Search search) throws Exception {
 		Map<String,Object> map = new HashMap<String,Object>();
 		Page resultPage = new Page();
 		int totalCount = 0;
-		
+		System.out.println("json/listProduct : POST");
 		if(search.getCurrentPage()==0) {
 			search.setCurrentPage(1);
 		}
-		search.setPageSize(pageSize);
+		search.setPageSize(30);
 		map = productService.getProductList(search);
 		totalCount = (Integer)map.get("totalCount");
-		resultPage = new Page(search.getCurrentPage(), totalCount, pageUnit, pageSize);
+		resultPage = new Page(search.getCurrentPage(), totalCount, pageUnit, 30);
 		
 		map.put("list", map.get("list"));
 		map.put("resultPage", resultPage);

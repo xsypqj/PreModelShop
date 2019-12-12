@@ -1,6 +1,9 @@
 package com.model2.mvc.service.product.domain;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 
 public class Product {
@@ -19,8 +22,16 @@ public class Product {
 	public Product(){
 	}
 
-	public String getFileName() {
-		return fileName;
+	public List getFileName() {
+		List<String> imageFile = new ArrayList<String>();
+		StringTokenizer fileCSV;
+		fileCSV = new StringTokenizer(fileName,"?");
+			int size = fileCSV.countTokens();
+			for(int i=0; i<size; i++) {
+				imageFile.add(i,fileCSV.nextToken());
+			}
+		
+		return imageFile;
 	}
 	public void setFileName(String fileName) {
 		this.fileName = fileName;

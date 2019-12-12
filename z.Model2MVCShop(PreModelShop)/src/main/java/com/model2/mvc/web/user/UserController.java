@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
+import com.model2.mvc.common.util.SearchCounter;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.user.UserService;
 import com.model2.mvc.service.user.domain.User;
@@ -42,7 +43,7 @@ public class UserController {
 	@Value("#{commonProperties['pageUnit'] ?: 3}")
 	int pageUnit;
 	
-	@Value("#{commonProperties['pageSize'] ?: 2}")
+	@Value("#{commonProperties['pageSize'] ?: 20}")
 	int pageSize;
 	
 	//Constructor
@@ -51,6 +52,20 @@ public class UserController {
 	}
 	
 	//Method
+	@RequestMapping( value="addUser", method=RequestMethod.GET )
+	public ModelAndView addUser() throws Exception {
+		//Field
+		ModelAndView modelAndView = new ModelAndView();
+		
+		//Business Logic
+		
+		//Model
+		
+		//View
+		modelAndView.setViewName("redirect:/user/addUserView.jsp");
+		return modelAndView;
+	}//end of addUser
+	
 	@RequestMapping( value="addUser", method=RequestMethod.POST )
 	public ModelAndView adduser(@ModelAttribute("user") User user) throws Exception {
 		//Field
@@ -171,7 +186,7 @@ public class UserController {
 		Map<String,Object> map = new HashMap<String,Object>();
 		Page resultPage = new Page();
 		int totalCount = 0;
-		
+
 		//Business Logic
 		if(search.getCurrentPage()==0) {
 			search.setCurrentPage(1);
@@ -191,8 +206,22 @@ public class UserController {
 		return modelAndView;
 	}//end of listUser
 	
+	@RequestMapping( value="login", method=RequestMethod.GET )
+	public ModelAndView login() throws Exception {
+		//Field
+		ModelAndView modelAndView = new ModelAndView();
+		
+		//Business Logic
+		
+		//Model
+		
+		//View
+		modelAndView.setViewName("redirect:/user/loginView.jsp");
+		return modelAndView;
+	}//end of login
+	
 	@RequestMapping( value="login", method=RequestMethod.POST )
-	public ModelAndView login(@ModelAttribute("user") User user, HttpSession session) throws Exception {
+	public ModelAndView login(@ModelAttribute("user") User user, HttpSession session, HttpServletRequest request) throws Exception {
 		//Field
 		ModelAndView modelAndView = new ModelAndView();			
 		
@@ -200,6 +229,8 @@ public class UserController {
 		User db = userService.loginUser(user);
 		session.setAttribute("user", db);
 		
+		request.getServletContext().setAttribute("lankList", SearchCounter.getSearchCounter().getLankList());
+		request.getServletContext().setAttribute("lankProdNameList", SearchCounter.getSearchCounter().getLankProdNameList());	
 		//Model
 		
 		//View
@@ -221,6 +252,22 @@ public class UserController {
 		modelAndView.setViewName( "redirect:/index.jsp" );
 		return modelAndView;
 	}//end of logout
+	
+	@RequestMapping( value="updateUser", method=RequestMethod.GET )
+	public ModelAndView updateUser(@RequestParam("userId") String userId) throws Exception {
+		//Field
+		ModelAndView modelAndView = new ModelAndView();
+		
+		//Business Logic
+		User user = userService.getUser(userId);
+		
+		//Model
+		modelAndView.addObject("user",user);
+		
+		//View
+		modelAndView.setViewName("forward:/user/updateUser.jsp");
+		return modelAndView;
+	}
 	
 	@RequestMapping( value="updateUser", method=RequestMethod.POST )
 	public ModelAndView updateUser(@ModelAttribute("user") User user, HttpSession session) throws Exception {

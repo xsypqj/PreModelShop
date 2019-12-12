@@ -47,7 +47,7 @@
 															+"</h4>";
 									}else if(JSONData.approval == "500"){
 										var displayValue = "<h4>"
-															+"'"+JSONData.userName+"' 회원님의 잔액이 부족합니다.<br/>"
+															+"'"+JSONData.userName+"' 회원님의 계좌가 생성되었습니다.<br/>"
 															+"현재 잔액은 "+JSONData.balance+"원 입니다.";
 									}else{
 										var displayValue = "<h4>"
@@ -156,7 +156,7 @@
 	</tr>
 	<tr>
 		<td width="104" class="ct_write">
-			결제금액 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle">
+			충전금액 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle">
 		</td>
 		
 		<td bgcolor="D6D6D6" width="1"></td>

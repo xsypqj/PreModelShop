@@ -173,8 +173,6 @@ public class ProductController {
 	public ModelAndView getProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {	
 		//Field
 		ModelAndView modelAndView = new ModelAndView();
-		List<String> imageFile = new ArrayList<String>();
-		StringTokenizer fileCSV;
 		Product product = new Product();
 		String value = "";
 		Cookie cookie = null;
@@ -182,13 +180,7 @@ public class ProductController {
 		//Business Logic
 		product = productService.getProduct(Integer.parseInt(request.getParameter("prodNo")));
 
-		if(product.getFileName() != null && !product.getFileName().equals("")) {
-		fileCSV = new StringTokenizer(product.getFileName(),"?");
-			int size = fileCSV.countTokens();
-			for (int i=0; i<size; i++) {
-				imageFile.add(i,fileCSV.nextToken());
-			}
-		}
+		System.out.println("테스트용 디버깅");
 		// Cookie + 최근 본 상품
 		if(request.getCookies() != null) {
 			for(int i=0; i<request.getCookies().length; i++) {
@@ -218,7 +210,7 @@ public class ProductController {
 		}
 		modelAndView.addObject("product", product);
 		modelAndView.addObject("menu", request.getAttribute("menu"));
-		modelAndView.addObject("imageFile",imageFile);
+		modelAndView.addObject("imageFile",product.getFileName());
 		modelAndView.setViewName(menu);
 		return modelAndView; 
 	}//end of getProduct
@@ -235,10 +227,10 @@ public class ProductController {
 		if(search.getCurrentPage()==0) {
 			search.setCurrentPage(1);
 		}
-		search.setPageSize(pageSize);
+		search.setPageSize(30);
 		map = productService.getProductList(search);
 		totalCount = (Integer)map.get("totalCount");
-		resultPage = new Page(search.getCurrentPage(), totalCount, pageUnit, pageSize);
+		resultPage = new Page(search.getCurrentPage(), totalCount, pageUnit, 30);
 		
 		//Model
 		if(request.getParameter("dupl") != null && !request.getParameter("dupl").equals("")) {

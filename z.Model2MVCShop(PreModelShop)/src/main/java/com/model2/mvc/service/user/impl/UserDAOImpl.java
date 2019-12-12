@@ -52,6 +52,7 @@ public class UserDAOImpl implements UserDAO{
 	}
 	
 	public void updateUser(User user) throws Exception {
+		System.out.println("디버깅 테스트 : "+user.toString());
 		sqlSession.update("UserMapper.updateUser",user);
 	}
 	

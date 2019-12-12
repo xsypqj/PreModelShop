@@ -168,6 +168,7 @@ public class UserServiceImpl implements UserService{
 		SearchCounter.getSearchCounter().setProductService(productDAO);
 		System.out.println("Method com.model2.mvc.service.user.impl.UserServiceImpl.init()");
 		SearchCounter.getSearchCounter().makeCountMap();	
+		
 	}
 	
 	@PreDestroy

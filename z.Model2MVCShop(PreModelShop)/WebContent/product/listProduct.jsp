@@ -1,17 +1,138 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR" %>
+<%@ page contentType="text/html; charset=EUC-KR" %>
 <%@ page pageEncoding="EUC-KR" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	
 <!DOCTYPE html>
-<html>
+<html lang="ko">
+
 <head>
 	<meta charset="EUC-KR">
-	<title>${!empty menu && menu=="manage" ? "상품 관리" : "상품 목록조회"}</title>
 	
-	<link rel="stylesheet" href="/css/admin.css" type="text/css">
-	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<!-- 참조 : http://getbootstrap.com/css/   참조 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
+	<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+	
+	
+	<!-- Bootstrap Dropdown Hover CSS -->
+	<link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+    <!-- Bootstrap Dropdown Hover JS -->
+    <script src="javascript/bootstrap-dropdownhover.min.js"></script>
+    
+    <!-- jQuery UI toolTip 사용 CSS-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- jQuery UI toolTip 사용 JS-->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <!--  ///////////////////////// CSS ////////////////////////// -->
+    <style>
+    
+    	.thumbnail-wrappper { 
+			width: 25%; 
+		} 
+		.thumbnail {
+			position: relative; padding-top: 100%; /* 1:1 ratio */ overflow: hidden; 
+		} 
+		.thumbnail .centered { 
+			position: absolute; 
+			top: 0; 
+			left: 0; 
+			right: 0; 
+			bottom: 0; 
+			-webkit-transform: translate(50%,50%); 
+			-ms-transform: translate(50%,50%); 
+			transform: translate(50%,50%); 
+		} 
+		.thumbnail .centered img { 
+			position: absolute; 
+			top: 0; 
+			left: 0; 
+			max-width: 100%; 
+			height: auto; 
+			-webkit-transform: translate(-50%,-50%); 
+			-ms-transform: translate(-50%,-50%); 
+			transform: translate(-50%,-50%); 
+		}
+
+    </style>
+    
+    <!--  ///////////////////////// JavaScript ////////////////////////// -->
 	<script type="text/javascript">
 	
+	////////////////////////////////////////////////////////////////// 무한스크롤 기능 //////////////////////////////////////////////////////////////////
+	$(function(){
+		var bool = true;
+		var currentPage = 2;
+		$(window).scroll(function(){
+			var window = $(this);
+            var scrollTop = $(window).scrollTop();
+            var windowHeight = $(window).height();
+            var documentHeight = $(document).height();            
+            
+            if(bool){          	
+	            if( scrollTop + windowHeight + 300 > documentHeight ){
+	            	bool = false;
+	            	//쓰로틀링 설정
+	            	var timeout = setTimeout(function(){
+	            		bool = true;
+	            		
+	            	},1000);//end of setTimeout
+
+	            	//쓰로틀링 종료
+	            	if( $("#maxPage").val() == currentPage ){
+	            		clearTimeout(timeout);
+	            	}//end of clearTimeout
+	            	
+	            		$.ajax(
+	            				{
+	            					url : "/product/json/listProduct" ,
+	            					method : "POST" ,
+	            					data : JSON.stringify({
+	            						currentPage : currentPage
+	            					}) ,
+	            					dataType : "json" ,
+	            					headers : {
+	            						"Accept" : "application/json" ,
+	            						"Content-Type" : "application/json"
+	            					} ,
+	            					success : function(JSONData , status){
+										var displayValue = "";
+										for(var i=0; i<JSONData.list.length; i++){											
+											var displayHtml = '<div class="col-xs-6 col-sm-4 col-md-2 ">'
+																+'<div class="thumbnail-wrapper">'
+																+'<div class="thumbnail">'
+																+'<div class="centered">'
+																+'<img src="/images/uploadFiles/'+JSONData.list[i].fileName[0]+'" alt="'+JSONData.list[i].fileName[0]+'" >'
+																+'</div>'
+																+'</div>'
+																+'<div class="caption">'
+																+'<h3>Product &nbsp;&nbsp; <i class="glyphicon glyphicon-shopping-cart"></i></h3>'
+																+'<p>상품번호'+JSONData.list[i].prodNo+'<br/>'
+																+'상 품 명'+JSONData.list[i].prodName+'<br/>'
+																+'제조일자'+JSONData.list[i].manuDate+'<br/>'
+																+'상품가격'+JSONData.list[i].price+'<br/>'
+																+'등록일자'+JSONData.list[i].regDate
+																+'</div>'
+																+'</div>'
+																+'</div>'
+											displayValue += displayHtml;
+										}										
+										$(".row").append(displayValue);
+										currentPage ++;
+	            					}//end of Call Back Function
+	            				})//end of ajax
+	            	
+	            } 
+            }
+            
+        });//end of scroll
+	});//end of function
+	//////////////////////////////////////////////////////////////////무한스크롤 기능 //////////////////////////////////////////////////////////////////
 	
 	function fncList(currentPage){
 		//document.getElementById("currentPage").value = currentPage;
@@ -36,9 +157,14 @@
 			}
 		});
 			
-		$(".ct_list_pop td:nth-child(3)").bind("click",function(){
+		$("img:nth-child(1)").bind("click",function(){		
+			var prodNo = $(this).parent().parent().parent().find("span").text().trim();
+			var menu = $("#menu").val();
+			if(menu == "" || menu == null){
+				menu = "search";
+			}
 			
-			if($("#menu").val() != null && $("#menu").val()=="manage" ){
+			if(menu != null && menu=="manage" ){
 				if($(this).children("#flag").val()== 0 ){
 					self.location = "/product/updateProductView?prodNo="+$(this).children("#prodNo").val()+"&menu="+$("#menu").val()+"&work=0";
 				}
@@ -84,9 +210,8 @@
 				}//end of ValidationCheck
 				
 			}
-			if($("#menu").val()=="search" ){
-				window.parent.frames["leftFrame"].document.location.reload();
-				self.location = "/product/getProduct?prodNo="+$(this).children("#prodNo").val()+"&menu="+$("#menu").val();
+			if(menu=="search" ){
+				self.location = "/product/getProduct?prodNo="+prodNo+"&menu="+menu;
 			}
 		});
 		
@@ -100,8 +225,8 @@
 				self.location = "/purchase/updateTranCodeByProd?prodNo="+prodNo+"&tranCode="+tranCode;
 				}
 			}); 
-			$(".ct_list_pop td:nth-child(9)").children("span:contains('카트에 넣기')").bind("click",function(){	
-				self.location = "/user/insertCart?prodNo="+$(this).closest(".ct_list_pop").children("td:nth-child(3)").find("input[name='prodNo']").val();
+			$("i:nth-child(1)").bind("click",function(){	
+				self.location = "/user/insertCart?prodNo="+$(this).parent().parent().find("span").text().trim();
 			});
 			$(".ct_list_pop td:nth-child(9)").children("span:contains('추가성공!바로 확인')").bind("click",function(){	
 				self.location = "/user/getCartList?prodNo="+$(this).closest(".ct_list_pop").children("td:nth-child(3)").find("input[name='prodNo']").val();
@@ -117,218 +242,48 @@
 	
 	</script>
 </head>
-
-<body bgcolor="#ffffff" text="#000000">
-<div style="width:98%; margin-left:10px;">
-<!-- <form name="detailForm" action="/product/listProduct?menu=${menu}" method="post"> -->
-<form name="detailForm">
-<input type="hidden" id="menu" name="menu" value="${menu}">
-
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif" width="15" height="37"/>
-		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">
-					
-					${!empty menu && menu=="manage" ? "상품 관리" : "상품 목록조회"}
-								
-					</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37">
-			<img src="/images/ct_ttl_img03.gif" width="12" height="37"/>
-		</td>
-	</tr>
-</table>
-
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	
-	<tr>
-		<td align="right">
-			<select name="searchCondition" class="ct_input_g" style="width:80px">
+<body>
+	<input type="hidden" id="maxPage" value="${resultPage.maxPage}">
+	<input type="hidden" id="menu" value="${menu}">
+	<!-- ToolBar Start /////////////////////////////////////-->
+	<jsp:include page="/layout/toolbar.jsp" />
+   	<!-- ToolBar End /////////////////////////////////////-->
+   	<br/><br/><br/><br/>
+   	<!--  화면구성 div Start /////////////////////////////////////-->
+	<div class="container">
+		<div class="row">
+		<c:set var="i" value="0" />
+		<c:forEach var="product" items="${list}">
+		<c:set var="i" value="${i+1}" />
+		
+			<div class="col-xs-6 col-sm-4 col-md-2 ">
+				<div class="thumbnail-wrapper"> 
+					<div class="thumbnail"> 
+						<div class="centered"> 
+							<img src="/images/uploadFiles/${ product.fileName[0] }" alt="${ product.fileName[0] }" >
+							
+						</div>
+						
+					</div>
+						<div class="caption">
+					        <h3>Product &nbsp;&nbsp; <i class="glyphicon glyphicon-shopping-cart"></i></h3>
+					         <p>상품번호<span>${product.prodNo}</span><br/>
+					        	상 품 명${product.prodName}<br/>
+					        	제조일자${product.manuDate}<br/>
+					        	상품가격${product.price}<br/>
+					        	등록일자${product.regDate}
+					        	
+				        </div>
+				</div>			
+			</div>
 			
-				<option value="0" ${!empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>상품번호</option>
-				<option value="1" ${!empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>상품명</option>
-				<option value="2" ${!empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>상품가격</option>
-		
-			</select>
-			<input type="text" name="searchKeyword"  value="${!empty search.searchKeyword && search.searchKeyword != null ? search.searchKeyword : ''}"
-										class="ct_input_g" style="width:200px; height:19px" />
-		</td>
-				
-		<td align="right" width="70">
-			<table border="0" cellspacing="0" cellpadding="0">
-			
-				<tr>
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23">
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<!--<a href="javascript:fncGetSearchList();"></a>  -->
-						검색
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23">
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td colspan="11" >전체 ${resultPage.totalCount} 건수, 현재 ${resultPage.currentPage} 페이지</td>
-	</tr>
-	<tr>
-		<td class="ct_list_b" width="100">No</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">상품명</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">가격</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b">등록일</td>	
-		<td class="ct_line02"></td>
-		<td class="ct_list_b">현재상태</td>	
-	</tr>
-	<tr>
-		<td colspan="11" bgcolor="808285" height="1"></td>
-	</tr>
-		
-	<c:set var="i" value="0" />
-	<c:forEach var="product" items="${list}">
-	
-	<c:set var="i" value="${i+1}" />
-	<tr class="ct_list_pop">
-		<td align="center">${i}</td>
-		<td></td>
-		<td align="center">
-		<input type="hidden" id="prodNo" name="prodNo" value="${product.prodNo}">
-		<input type="hidden" id="tranNo" name="prodNo" value="${product.tranNo}">
-		<input type="hidden" id="flag" name="flag" value="${product.flag}">
-		<input type="hidden" id="tranCode" name="tranCode" value="${product.tranCode}">
-		<!-- 
-		<c:if test="${!empty product.tranCode && menu==\"manage\"}">
-			<c:choose>
-				<c:when test="${product.flag==\"0\"}">
-					<a href="/product/updateProductView?prodNo=${product.prodNo}&menu=${menu}&work=0">${product.prodName}</a>
-				</c:when>
-				<c:when test="${product.tranCode==1 || product.tranCode==2}">
-					<a href="/purchase/getPurchase?tranNo=${product.tranNo}&menu=${menu}">${product.prodName}</a>
-				</c:when>
-				<c:when test="${product.tranCode==3}">
-					<a href="/product/getProduct?prodNo=${product.prodNo}&menu=${menu}&work=0">${product.prodName}</a>
-				</c:when>
-			</c:choose>
-		</c:if>
-		<c:if test="${menu==\"search\"}">
-			<a href="/product/getProduct?prodNo=${product.prodNo}&menu=${menu}">${product.prodName}</a>
-		</c:if>
-		-->
-		${product.prodName}
-		</td>
-		<td></td>
-		<td align="center">${product.price}
-		</td>
-		<td></td>
-		<td align="center">${product.regDate}
-		</td>
-		<td></td>
-		<td align="center">
-									
-						
-						<c:choose>
-							<c:when test="${product.flag==\"0\" && menu==\"search\"}">
-										<!-- <a href="/user/insertCart?prodNo=${product.prodNo}"></a> -->
-										<span>카트에 넣기</span>
-										
-									<c:if test="${!empty dupl && dupl==\"success\"}">	
-										<!-- <a href="/user/getCartList?prodNo=${product.prodNo}"></a> -->
-										<span>추가성공!바로 확인	</span>
-									</c:if>
-									<c:if test="${!empty dupl && dupl==\"dupl\"}">
-										<!-- <a href="/user/getCartList?prodNo=${product.prodNo}"></a> -->
-										<span>중복상품!리스트 확인</span>
-									</c:if>							
-							</c:when>
-							 
-							<c:when test="${!empty product.tranCode && menu==\"manage\"}">
-								${empty product.tranCode || product.tranCode=="" ? "판매중" : "" }
-								${product.tranCode==1 ? "구매완료" : "" }
-								${product.tranCode==2 ? "배송중" : "" }
-								${product.tranCode==3 ? "배송완료" : "" }
-							</c:when>
-						</c:choose>
-						
-						
-						
-						<span>
-						<c:if test="${!empty product.tranCode && product.tranCode==1}">
-									<!-- <a href="/purchase/updateTranCodeByProd?prodNo=${product.prodNo}&tranCode=${product.tranCode}"></a> -->
-									배송하기
-						</c:if>		
-						</span>
-		</td>	
-	</tr>
-		
-	<tr>
-		<td id="${product.prodName}" colspan="11" bgcolor="D6D7D6" height="1"></td>
-	</tr>
 		</c:forEach>
-</table>
-
-<%--  PageNavigation Start... --%>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td align="center">
-		  <input type="hidden" id="currentPage" name="currentPage" value=""/>
-			
-			<%--  
-			<c:choose>
-			<c:when test="${ resultPage.currentPage <= resultPage.pageUnit }">
-				◀ 이전
-			</c:when>
-			<c:when test="${ resultPage.currentPage > resultPage.pageUnit }">
-				<a href="javascript:fncGetProductList('${resultPage.currentPage-1}')">◀ 이전</a>
-			</c:when>
-			</c:choose>
 			
 		
-			<c:forEach var="i" begin="${resultPage.beginUnitPage}" step="1" end="${resultPage.endUnitPage}">
-				<a href="javascript:fncGetProductList('${i}')">${i}</a>
-			</c:forEach>
-			
-			<c:choose>
-			<c:when test="${ resultPage.endUnitPage >= resultPage.maxPage }">
-				이후 ▶
-			</c:when>
-			<c:when test="${ resultPage.endUnitPage < resultPage.maxPage }">
-				<a href="javascript:fncGetProductList('${resultPage.endUnitPage+1}')">이후 ▶</a>
-			</c:when>
-			</c:choose>
-			--%> 
-			  
-			<jsp:include page="../common/pageNavigator.jsp" />
-			
-						
-			
-				
-		
-    	</td>
-	</tr>
-</table>
-<%-- PageNavigation End... --%>
-
-</form>
-
-
-
+		</div>
+	
+	</div> 
 </body>
 </html>
-   
+
+

@@ -65,10 +65,7 @@ public class ProductServiceImpl implements ProductService{
 		return map;
 		
 	}
-	//public Map<String,Object> getCartList(String cart) throws Exception{
-	//	return dao.getCartList(cart);
-	//}
-
+	
 	
 
 }
