@@ -112,7 +112,7 @@
 																+'</div>'
 																+'<div class="caption">'
 																+'<h3>Product &nbsp;&nbsp; <i class="glyphicon glyphicon-shopping-cart"></i></h3>'
-																+'<p>상품번호'+JSONData.list[i].prodNo+'<br/>'
+																+'<p>상품번호<span>'+JSONData.list[i].prodNo+'</span><br/>'
 																+'상 품 명'+JSONData.list[i].prodName+'<br/>'
 																+'제조일자'+JSONData.list[i].manuDate+'<br/>'
 																+'상품가격'+JSONData.list[i].price+'<br/>'
