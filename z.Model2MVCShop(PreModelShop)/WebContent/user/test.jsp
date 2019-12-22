@@ -1,82 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Google Maps</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+
+      // This example displays a marker at the center of Australia.
+      // When the user clicks the marker, an info window opens.
  
-  <style>
-  * {
-  	margin: 0;
-  	padding: 0;
-  }
-  
-  body {
-  	font-family: Source Sans Pro;
-  }
-  
-  #sidebar {
-  	position: absolute;
-  	width: 300px;
-  	height: 100%;
-  	background: #000;
-  	left: -300px;
-  	transition: .4s;
-  }
-  
-  #sidebar.active {
-  	left: 0;
-  }
-  
-  #sidebar ul li {
-  	list-style: none;
-  	color: #fff;
-  	font-size: 20px;
-  	padding: 20px 24px;
-  }
-  
-  #sidebar .toggle-btn {
-  	position: absolute;
-  	top: 30px;
-  	left: 330px;
-  	}
-  	
-  	.toggle-btn span {
-  		width: 45px;
-  		height: 4px;
-  		background: #000;
-  		display: block;
-  		margin-top: 4px;
-  		
-  	}
-  
-  </style>
-  
-  <script type="text/javascript">
-  	
-  	
-  		function show() {
-  			document.getElementById('sidebar').classList.toggle('active');
-  		}
-  		
-  	
-  
-  </script>
-</head>
-<body>
+      function initMap() {
+        var bitcamp = {lat: 37.499736, lng: 127.029354};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 18,
+          center: bitcamp
+        });
 
-<div id="sidebar">
-	<div class="toggle-btn" onclick="show()">
-		<span></span>
-		<span></span>
-		<span></span>
-	</div>
-	
-	<ul>
-		<li>Home</li>
-		<li>Work</li>
-		<li>About</li>
-		<li>Contact</li>
-	</ul>
-</div>
+        var contentString = '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+            '<div id="bodyContent">'+
+            '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+            'sandstone rock formation in the southern part of the '+
+            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+            'south west of the nearest large town, Alice Springs; 450&#160;km '+
+            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+            'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+            'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+            'Aboriginal people of the area. It has many springs, waterholes, '+
+            'rock caves and ancient paintings. Uluru is listed as a World '+
+            'Heritage Site.</p>'+
+            '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+            'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+            '(last visited June 22, 2009).</p>'+
+            '</div>'+
+            '</div>';
 
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
 
-</body>
+        var marker = new google.maps.Marker({
+          position: bitcamp,
+          map: map,
+          title: 'Uluru (Ayers Rock)'
+        });
+        marker.addListener('click', function() {
+          infowindow.open(map, marker);
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFF1jpXXkffR_iRkB0paN68O4rFtnK7to&callback=initMap">
+    </script>
+  </body>
 </html>

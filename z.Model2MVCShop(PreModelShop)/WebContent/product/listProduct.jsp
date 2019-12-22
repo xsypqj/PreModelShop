@@ -81,6 +81,7 @@
 	            	var timeout = setTimeout(function(){
 	            		bool = true;
 	            		
+	            		
 	            	},1000);//end of setTimeout
 
 	            	//쓰로틀링 종료
@@ -267,6 +268,7 @@
 					</div>
 						<div class="caption">
 					        <h3>Product &nbsp;&nbsp; <i class="glyphicon glyphicon-shopping-cart"></i></h3>
+					        
 					         <p>상품번호<span>${product.prodNo}</span><br/>
 					        	상 품 명${product.prodName}<br/>
 					        	제조일자${product.manuDate}<br/>

@@ -90,10 +90,7 @@ public class ProductRestController {
 		String jsonData = br.readLine();
 		JSONObject jsonObject = (JSONObject)JSONValue.parse(jsonData);
 		Map<String,String> jsonMap = objectMapper.readValue(jsonObject.toString(), Map.class);
-		
-		List<String> imageFile = new ArrayList<String>();
 		Map<String,Object> map = new HashMap<String,Object>();
-		StringTokenizer fileCSV;
 		Product product = new Product();
 		String value = "";
 		Cookie cookie = null;
@@ -101,13 +98,7 @@ public class ProductRestController {
 		//Business Logic
 		product = productService.getProduct(Integer.parseInt(jsonMap.get("prodNo")));
 		
-		if(product.getFileName() != null && !product.getFileName().equals("")) {
-		fileCSV = new StringTokenizer(product.getFileName(),"?");
-			int size = fileCSV.countTokens();
-			for (int i=0; i<size; i++) {
-				imageFile.add(i,fileCSV.nextToken());
-			}
-		}
+		
 		// Cookie + 최근 본 상품
 		if(request.getCookies() != null) {
 			for(int i=0; i<request.getCookies().length; i++) {
@@ -128,7 +119,7 @@ public class ProductRestController {
 		map.put("work", jsonMap.get("work"));
 		map.put("product", product);
 		map.put("menu", jsonMap.get("menu"));
-		map.put("imageFile",imageFile);
+		map.put("imageFile",product.getFileName());
 		
 		return map;
 	}//end of getProduct
@@ -140,10 +131,8 @@ public class ProductRestController {
 		String[] getManuDate = null;
 		String manuDate = "";
 		String menu = "";
-		List<String> imageFile = new ArrayList<String>();
-		StringTokenizer fileCSV;
 		Product resultProduct = new Product();
-		System.out.println(""+product.getManuDate());
+		
 		//Business Logic
 		if(product.getManuDate().length() > 8) {		
 			getManuDate = (product.getManuDate()).split("-");	
@@ -153,7 +142,7 @@ public class ProductRestController {
 			}
 			map.put("manuDate", manuDate);
 		}
-		System.out.println("manuData : "+product.getManuDate());
+		
 		productService.updateProduct(product);
 				
 		if(request.getParameter("manage")!=null) {
@@ -161,16 +150,10 @@ public class ProductRestController {
 			map.put("work","0");
 		}
 		resultProduct = productService.getProduct(product.getProdNo());
-		if(product.getFileName() != null && !product.getFileName().equals("")) {
-		fileCSV = new StringTokenizer(product.getFileName(),"?");
-			int size = fileCSV.countTokens();
-			for (int i=0; i<size; i++) {
-				imageFile.add(i,fileCSV.nextToken());
-			}
-		}
+		
 		map.put("product", product);
 		map.put("menu", request.getAttribute("menu"));
-		map.put("imageFile",imageFile);
+		map.put("imageFile",product.getFileName());
 		return map;
 	}//end of updateProduct
 	
